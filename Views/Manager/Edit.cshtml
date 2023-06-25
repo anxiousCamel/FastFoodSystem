@@ -1,0 +1,87 @@
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+
+    <!--Group Product-->
+    <div class="row">
+        <!--Nome-->
+        <div class="mb-3 col">
+            <label for="" class="form-label">Name</label>
+            <input class="form-control" id="" placeholder="Enter the name of product to add">
+        </div>
+
+        <!--Type-->
+        <div class="mb-3 col">
+            <label for="" class="form-label">Type</label>
+            <select class="form-select">
+                <option selected>Select type of product</option>
+                <option value="1">Follow-up</option>
+                <option value="2">Dessert</option>
+                <option value="3">Drinks</option>
+                <option value="4">Snack</option>
+                <option value="5">Toys</option>
+            </select>
+        </div>
+    </div>
+
+
+    <!--Ingredients-->
+    <div class="mb-3">
+        <label for="" class="form-label">Ingredients</label>
+        <input class="form-control" id=""
+            placeholder="Enter the ingredients of the product to be added, separating them with a comma ' , '">
+    </div>
+
+    <!--Description-->
+    <div class="mb-3">
+        <label for="" class="form-label">Description</label>
+        <textarea class="form-control" id="" rows="3"
+            placeholder="Enter the summary description of product to add"></textarea>
+    </div>
+
+    <!--Group Price-->
+    <div class="row">
+        <label for="" class="form-label">Price</label>
+        <!--Price-->
+        <div class="input-group mb-3 col">
+            <span class="input-group-text">$</span>
+            <input type="text" class="form-control" placeholder="Enter to price of product">
+        </div>
+
+        <!--PricePromotion-->
+        <div class="input-group mb-3 col">
+            <span class="input-group-text">$</span>
+            <input type="text" class="form-control" placeholder="Enter to price promotion">
+        </div>
+
+        <!--PromotionDay-->
+        <div class="mb-3 col">
+            <select class="form-select">
+                <option selected>Select promotion day of product</option>
+                <option value="1">Sunday</option>
+                <option value="2">Monday</option>
+                <option value="3">Tuesday</option>
+                <option value="4">Wednesday</option>
+                <option value="5">Thursday</option>
+                <option value="6">Friday</option>
+                <option value="7">Saturday</option>
+            </select>
+        </div>
+
+    </div>
+
+
+    <!--Image-->
+    <div class="mb-3">
+        <label for="formFile" class="form-label">Image of product to add</label>
+        <input class="form-control" type="file" id="">
+    </div>
+
+    <button class="btn btn-warning" type="button">Confirm Edit</button>
+    <button class="btn btn-secondary" type="button" asp-controller="Manager" asp-action="Index">Cancel</button>
+
+</div>

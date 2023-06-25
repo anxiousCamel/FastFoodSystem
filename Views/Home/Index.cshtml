@@ -1,0 +1,49 @@
+﻿@model List<ProductsModel>
+
+@{
+    ViewData["Title"] = "Index Client";
+}
+
+
+<div>
+    @functions {
+        Dictionary<int, string> productTypeNames = new Dictionary<int, string>()
+        {{ 1, "hamburgers" },{ 2, "Drinks" },{ 3, "accompaniments" },{ 4, "dessert" },{ 5, "Toys" },{ 6, "Others" }};
+
+        string GetProductTypeTitle(int productType)
+        {
+            if (productTypeNames.ContainsKey(productType))
+            {
+                return productTypeNames[productType];
+            }
+
+            return string.Empty;
+        }
+    }
+
+    <section class="mb-5">
+        @if (Model != null && Model.Any())
+        {
+            foreach (ProductsModel product in Model)
+            {
+                string productTypeTitle = GetProductTypeTitle(product.Type);
+
+                if (!string.IsNullOrEmpty(productTypeTitle))
+                {
+                    <div class="mb-5">
+                        <h5>@productTypeTitle</h5>
+                        <div class="row row-cols-1 row-cols-md-5 g-4">
+                            <div class="col">
+                                <div class="card">
+                                    <img src="@product.ImageURL" class="card-img" alt="...">
+                                    <h6 class="card-title">@product.Name</h6>
+                                    <p class="card-text">$@product.Price</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        }
+    </section>
+</div>
