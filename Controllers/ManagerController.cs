@@ -37,6 +37,19 @@ namespace EasyProduct.Controllers
             return View("Edit", product);
         }
 
+        [HttpPost]
+        public IActionResult Edit(ProductsModel products)
+        {
+            _ProductsRepository.EditProduct(products);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult DeleteProduct (int id)
+        {
+            _ProductsRepository.DeleteProduct(id);
+            return RedirectToAction("Index");
+        }
+
         public IActionResult Index()
         {
             List<ProductsModel> products = _ProductsRepository.SearcheAll();

@@ -8,6 +8,9 @@
 
 <form asp-controller="Manager" asp-action="Edit" method="post">
 
+    <!--Id Product-->
+    <input type="hidden" asp-for="Id">
+
     <!--Group Product-->
     <div class="row">
 
@@ -21,15 +24,16 @@
         <div class="mb-3 col-lg-5">
 
             <!--Image URL-->
-        <div class="mb-3">
-            <label class="form-label">Image URL</label>
-            <input asp-for="ImageURL" id="image-url" class="form-control" placeholder="Enter the URL of image to product to add">
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Image URL</label>
+                <input asp-for="ImageURL" id="image-url" class="form-control"
+                    placeholder="Enter the URL of image to product to add">
+            </div>
 
-        <!--Representation Image-->
-        <img id="product-image" class="img-thumbnail img-fluid" src="" alt="..." onerror="handleImageError()">
-        <p id="image-error" class="text-danger" style="display: none;">Invalid image URL</p>
-    </div>
+            <!--Representation Image-->
+            <img id="product-image" class="img-thumbnail img-fluid" src="" alt="..." onerror="handleImageError()">
+            <p id="image-error" class="text-danger" style="display: none;">Invalid image URL</p>
+        </div>
 
         <div class="col-lg-7">
             <!--Type-->
@@ -53,12 +57,12 @@
                     placeholder="Enter the ingredients of the product to be added, separating them with a comma ' , '">
             </div>
 
-<!--Description-->
-<div class="mb-3">
-    <label class="form-label">Description</label>
-    <textarea asp-for="Description" class="form-control" id="" rows="3"
-        placeholder="Enter the summary description of product to add"></textarea>
-</div>
+            <!--Description-->
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea asp-for="Description" class="form-control" id="" rows="3"
+                    placeholder="Enter the summary description of product to add"></textarea>
+            </div>
         </div>
 
     </div>
@@ -97,8 +101,7 @@
     </div>
 
     <button class="btn btn-warning" type="submit">Confirm Edit</button>
-    <button class="btn btn-secondary" type="button" asp-controller="Manager" asp-action="Index">Cancel</button>
-
+    <a class="btn btn-secondary" role="button" asp-controller="Manager" asp-action="Index">Cancel</a>
 </form>
 
 <script src="/js/ChangeImage.js"></script>

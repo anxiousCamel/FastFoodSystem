@@ -11,5 +11,7 @@ namespace EasyProduct.Repository.Interface
         ProductsModel SearcheForId (int id);
         List<ProductsModel> SearcheAll ();
         ProductsModel AddProduct (ProductsModel product);
+        ProductsModel EditProduct (ProductsModel products);
+        bool DeleteProduct(int Id);
     }
 }
