@@ -24,22 +24,26 @@
     <section class="mb-5">
         @if (Model != null && Model.Any())
         {
-            foreach (ProductsModel product in Model)
+            var groupedProducts = Model.GroupBy(p => p.Type);
+            foreach (var group in groupedProducts)
             {
-                string productTypeTitle = GetProductTypeTitle(product.Type);
+                string productTypeTitle = GetProductTypeTitle(group.Key);
 
                 if (!string.IsNullOrEmpty(productTypeTitle))
                 {
                     <div class="mb-5">
                         <h5>@productTypeTitle</h5>
                         <div class="row row-cols-1 row-cols-md-5 g-4">
-                            <div class="col">
-                                <div class="card">
-                                    <img src="@product.ImageURL" class="card-img" alt="...">
-                                    <h6 class="card-title">@product.Name</h6>
-                                    <p class="card-text">$@product.Price</p>
+                            @foreach (var product in group)
+                            {
+                                <div class="col">
+                                    <div class="card">
+                                        <img src="@product.ImageURL" class="card-img" alt="...">
+                                        <h6 class="card-title">@product.Name</h6>
+                                        <p class="card-text">$@product.Price</p>
+                                    </div>
                                 </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 }

@@ -18,6 +18,12 @@ namespace EasyProduct.Repository
 
         }
 
+        // Buscar por id
+        public ProductsModel SearcheForId(int id)
+        {
+            return _BancoContext.Products.FirstOrDefault(x => x.Id == id) ?? new ProductsModel();
+        }
+
         // Searche products
         public List<ProductsModel> SearcheAll()
         {

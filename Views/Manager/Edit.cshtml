@@ -1,47 +1,69 @@
+@model EasyProduct.Models.ProductsModel
+
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "EditProduct";
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<div>
+<form asp-controller="Manager" asp-action="Edit" method="post">
 
     <!--Group Product-->
     <div class="row">
+
         <!--Nome-->
-        <div class="mb-3 col">
-            <label for="" class="form-label">Name</label>
-            <input class="form-control" id="" placeholder="Enter the name of product to add">
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input asp-for="Name" class="form-control" id="" placeholder="Enter the name of product to add">
         </div>
 
-        <!--Type-->
-        <div class="mb-3 col">
-            <label for="" class="form-label">Type</label>
-            <select class="form-select">
-                <option selected>Select type of product</option>
-                <option value="1">Follow-up</option>
-                <option value="2">Dessert</option>
-                <option value="3">Drinks</option>
-                <option value="4">Snack</option>
-                <option value="5">Toys</option>
-            </select>
+        <!--Image-->
+        <div class="mb-3 col-lg-5">
+
+            <!--Image URL-->
+        <div class="mb-3">
+            <label class="form-label">Image URL</label>
+            <input asp-for="ImageURL" id="image-url" class="form-control" placeholder="Enter the URL of image to product to add">
         </div>
+
+        <!--Representation Image-->
+        <img id="product-image" class="img-thumbnail img-fluid" src="" alt="..." onerror="handleImageError()">
+        <p id="image-error" class="text-danger" style="display: none;">Invalid image URL</p>
+    </div>
+
+        <div class="col-lg-7">
+            <!--Type-->
+            <div class="mb-3">
+                <label class="form-label">Type</label>
+                <select class="form-select" asp-for="Type">
+                    <option selected>Select type of product</option>
+                    <option value="1">hamburgers</option>
+                    <option value="2">Drinks</option>
+                    <option value="3">Follow-up</option>
+                    <option value="4">Dessert</option>
+                    <option value="5">Toys</option>
+                    <option value="6">Others</option>
+                </select>
+            </div>
+
+            <!--Ingredients-->
+            <div class="mb-3">
+                <label class="form-label">Ingredients</label>
+                <input asp-for="Ingredients" class="form-control" id=""
+                    placeholder="Enter the ingredients of the product to be added, separating them with a comma ' , '">
+            </div>
+
+<!--Description-->
+<div class="mb-3">
+    <label class="form-label">Description</label>
+    <textarea asp-for="Description" class="form-control" id="" rows="3"
+        placeholder="Enter the summary description of product to add"></textarea>
+</div>
+        </div>
+
     </div>
 
 
-    <!--Ingredients-->
-    <div class="mb-3">
-        <label for="" class="form-label">Ingredients</label>
-        <input class="form-control" id=""
-            placeholder="Enter the ingredients of the product to be added, separating them with a comma ' , '">
-    </div>
-
-    <!--Description-->
-    <div class="mb-3">
-        <label for="" class="form-label">Description</label>
-        <textarea class="form-control" id="" rows="3"
-            placeholder="Enter the summary description of product to add"></textarea>
-    </div>
 
     <!--Group Price-->
     <div class="row">
@@ -49,18 +71,18 @@
         <!--Price-->
         <div class="input-group mb-3 col">
             <span class="input-group-text">$</span>
-            <input type="text" class="form-control" placeholder="Enter to price of product">
+            <input asp-for="Price" type="text" class="form-control" placeholder="Enter to price of product">
         </div>
 
         <!--PricePromotion-->
         <div class="input-group mb-3 col">
             <span class="input-group-text">$</span>
-            <input type="text" class="form-control" placeholder="Enter to price promotion">
+            <input asp-for="PromotionPrice" type="text" class="form-control" placeholder="Enter to price promotion">
         </div>
 
         <!--PromotionDay-->
         <div class="mb-3 col">
-            <select class="form-select">
+            <select asp-for="DayPromotion" class="form-select">
                 <option selected>Select promotion day of product</option>
                 <option value="1">Sunday</option>
                 <option value="2">Monday</option>
@@ -74,14 +96,9 @@
 
     </div>
 
-
-    <!--Image-->
-    <div class="mb-3">
-        <label for="formFile" class="form-label">Image of product to add</label>
-        <input class="form-control" type="file" id="">
-    </div>
-
-    <button class="btn btn-warning" type="button">Confirm Edit</button>
+    <button class="btn btn-warning" type="submit">Confirm Edit</button>
     <button class="btn btn-secondary" type="button" asp-controller="Manager" asp-action="Index">Cancel</button>
 
-</div>
+</form>
+
+<script src="/js/ChangeImage.js"></script>

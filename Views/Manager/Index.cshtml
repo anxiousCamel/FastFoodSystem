@@ -4,12 +4,22 @@
     ViewData["Title"] = "Index Manager";
 }
 
-
 <div>
+    <div class="d-flex justify-content-end">
+        <a class="btn btn-primary m-1" asp-controller="Manager" asp-action="Add" role="button">Add Product</a>
+        <a class="btn btn-danger m-1" asp-controller="Home" asp-action="Index" role="button">Sair</a>
+    </div>
 
     @functions {
         Dictionary<int, string> productTypeNames = new Dictionary<int, string>()
-    {{ 1, "hamburgers" },{ 2, "Drinks" },{ 3, "accompaniments" },{ 4, "dessert" },{ 5, "Toys" },{ 6, "Others" }};
+    {
+    { 1, "hamburgers" },
+    { 2, "Drinks" },
+    { 3, "accompaniments" },
+    { 4, "dessert" },
+    { 5, "Toys" },
+    { 6, "Others" }
+    };
 
         string GetProductTypeTitle(int productType)
         {
@@ -25,54 +35,61 @@
     <section class="mb-5">
         @if (Model != null && Model.Any())
         {
-            foreach (ProductsModel product in Model)
+            var groupedProducts = Model.GroupBy(p => p.Type);
+            foreach (var group in groupedProducts)
             {
-                string productTypeTitle = GetProductTypeTitle(product.Type);
+                string productTypeTitle = GetProductTypeTitle(group.Key);
 
                 if (!string.IsNullOrEmpty(productTypeTitle))
                 {
                     <div class="mb-5">
                         <h5>@productTypeTitle</h5>
                         <div class="row row-cols-1 row-cols-md-5 g-4">
-                            <div class="col">
-                                <div class="card">
-                                    <img src="@product.ImageURL" class="card-img" alt="...">
-                                    <h6 class="card-title">@product.Name</h6>
-                                    <p class="card-text">$@product.Price</p>
+                            @foreach (var product in group)
+                            {
+                                <div class="col">
+                                    <div class="card">
+                                        <img src="@product.ImageURL" class="card-img" alt="...">
+                                        <h6 class="card-title">@product.Name</h6>
+                                        <p class="card-text">$@product.Price</p>
 
-                                    <div class="row m-1">
-                                        <a class="btn btn-warning btn-sm col m-1 custom-link" asp-controller="Manager"
-                                            asp-action="Edit" role="button">Edit</a>
-                                        <button type="button" class="btn btn-danger btn-sm col m-1" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal">Remove</button>
+                                        <div class="row m-1">
+                                            <a class="btn btn-warning btn-sm col m-1 custom-link" role="button"
+                                               asp-route-id="@product.Id" asp-controller="Manager" asp-action="Edit">Edit</a>
+
+                                            <button type="button" class="btn btn-danger btn-sm col m-1" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal_@product.Id"
+                                                data-product-name="@product.Name">Remove</button>
+                                        </div>
                                     </div>
-
                                 </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 }
             }
+
+            foreach (var product in Model)
+            {
+                <div class="modal fade" id="deleteModal_@product.Id" tabindex="-1" aria-labelledby="deleteModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="deleteModalLabel">Remove @product.Name</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                This action cannot be reversed once done.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-danger">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         }
     </section>
-</div>
-
-
-<!-- Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="deleteModalLabel">Remove _nameProduct</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                this action has no reversal after done.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger">Delete</button>
-            </div>
-        </div>
-    </div>
 </div>

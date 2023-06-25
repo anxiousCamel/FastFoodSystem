@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "bCBnDE+4hOz2mIVf6ZjQYk2v2WEswOd7s75eXQ3TbzA=",
+  "Hash": "ApeTD+L2uYKIkANxDUONMXbUubpVQZtlhHAP7nUR1Wk=",
   "Source": "EasyProduct",
   "BasePath": "_content/EasyProduct",
   "Mode": "Default",
@@ -85,12 +85,12 @@
       "OriginalItemSpec": "wwwroot/favicon.ico"
     },
     {
-      "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/js/site.js",
+      "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/js/ChangeImage.js",
       "SourceId": "EasyProduct",
       "SourceType": "Discovered",
       "ContentRoot": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/",
       "BasePath": "_content/EasyProduct",
-      "RelativePath": "js/site.js",
+      "RelativePath": "js/ChangeImage.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -99,7 +99,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/js/site.js"
+      "OriginalItemSpec": "wwwroot/js/ChangeImage.js"
     },
     {
       "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.css",

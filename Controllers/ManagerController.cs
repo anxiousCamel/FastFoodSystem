@@ -31,9 +31,10 @@ namespace EasyProduct.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Edit()
+        public IActionResult Edit(int id)
         {
-            return View();
+            ProductsModel product = _ProductsRepository.SearcheForId(id);
+            return View("Edit", product);
         }
 
         public IActionResult Index()

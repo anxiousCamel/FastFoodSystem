@@ -8,6 +8,7 @@ namespace EasyProduct.Repository.Interface
 {
     public interface IProductsRepository
     {
+        ProductsModel SearcheForId (int id);
         List<ProductsModel> SearcheAll ();
         ProductsModel AddProduct (ProductsModel product);
     }
