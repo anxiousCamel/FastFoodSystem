@@ -12,14 +12,8 @@
 
     @functions {
         Dictionary<int, string> productTypeNames = new Dictionary<int, string>()
-    {
-    { 1, "hamburgers" },
-    { 2, "Drinks" },
-    { 3, "accompaniments" },
-    { 4, "dessert" },
-    { 5, "Toys" },
-    { 6, "Others" }
-    };
+        {{ 1, "hamburgers" },{ 2, "Drinks" },{ 3, "accompaniments" },{ 4, "dessert" },{ 5, "Toys" },{ 6, "Additional Hamburgers" },
+        { 7, "Additional Dessert" },{ 8, "Additional Follow-up" },{ 9,"Others" }};
 
         string GetProductTypeTitle(int productType)
         {
@@ -55,7 +49,7 @@
 
                                         <div class="row m-1">
                                             <a class="btn btn-warning btn-sm col m-1 custom-link" role="button"
-                                               asp-route-id="@product.Id" asp-controller="Manager" asp-action="Edit">Edit</a>
+                                                asp-route-id="@product.Id" asp-controller="Manager" asp-action="Edit">Edit</a>
 
                                             <button type="button" class="btn btn-danger btn-sm col m-1" data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal_@product.Id"
@@ -84,7 +78,8 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancel</button>
-                                <a role="button" class="btn btn-danger" asp-action="DeleteProduct" asp-route-id="@product.Id" asp-controller="Manager">Delete</a>
+                                <a role="button" class="btn btn-danger" asp-action="DeleteProduct" asp-route-id="@product.Id"
+                                    asp-controller="Manager">Delete</a>
                             </div>
                         </div>
                     </div>

@@ -21,12 +21,15 @@
             <label class="form-label">Type</label>
             <select class="form-select" asp-for="Type">
                 <option selected>Select type of product</option>
-                <option value="1">hamburgers</option>
+                <option value="1">Hamburgers</option>
                 <option value="2">Drinks</option>
                 <option value="3">Follow-up</option>
                 <option value="4">Dessert</option>
                 <option value="5">Toys</option>
-                <option value="6">Others</option>
+                <option value="6">Additional Hamburgers</option>
+                <option value="7">Additional Dessert</option>
+                <option value="8">Additional Follow-up</option>
+                <option value="9">Others</option>
             </select>
         </div>
     </div>
@@ -47,18 +50,18 @@
     </div>
 
     <!--Group Price-->
-    <div class="row"> 
+    <div class="row">
         <label for="" class="form-label">Price</label>
         <!--Price-->
         <div class="input-group mb-3 col">
             <span class="input-group-text">$</span>
-            <input asp-for="Price" type="text" class="form-control" placeholder ="Enter to price of product">
+            <input asp-for="Price" type="text" class="form-control" placeholder="Enter to price of product">
         </div>
 
         <!--PricePromotion-->
         <div class="input-group mb-3 col">
             <span class="input-group-text">$</span>
-            <input asp-for= "PromotionPrice" type="text" class="form-control" placeholder ="Enter to price promotion">
+            <input asp-for="PromotionPrice" type="text" class="form-control" placeholder="Enter to price promotion">
         </div>
 
         <!--PromotionDay-->
@@ -72,6 +75,7 @@
                 <option value="5">Thursday</option>
                 <option value="6">Friday</option>
                 <option value="7">Saturday</option>
+                <option value="8">None</option>
             </select>
         </div>
 
