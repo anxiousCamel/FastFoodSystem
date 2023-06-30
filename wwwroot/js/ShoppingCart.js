@@ -68,3 +68,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+function addToCart(productId) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/ProductCart/AddToCart', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                // Lógica de manipulação de sucesso, se necessário
+            } else {
+                // Lógica de tratamento de erro, se necessário
+            }
+        }
+    };
+    xhr.send('productId=' + encodeURIComponent(productId));
+}

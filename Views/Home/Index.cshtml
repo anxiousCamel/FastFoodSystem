@@ -1,4 +1,4 @@
-﻿@model List<ProductsModel>
+﻿@model EasyProduct.Models.ProductCartModel
 
 @{
     ViewData["Title"] = "Index Client";
@@ -10,14 +10,21 @@
 <div class="d-flex justify-content-end">
     <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
         aria-controls="staticBackdrop">
-        shopping cart
+        <i class="bi bi-basket-fill"></i>
     </button>
 </div>
 
 <div>
     @functions {
         Dictionary<int, string> productTypeNames = new Dictionary<int, string>()
-    {{ 1, "hamburgers" },{ 2, "Drinks" },{ 3, "accompaniments" },{ 4, "dessert" },{ 5, "Toys" },{ 9,"Others" }};
+    {
+    { 1, "hamburgers" },
+    { 2, "Drinks" },
+    { 3, "accompaniments" },
+    { 4, "dessert" },
+    { 5, "Toys" },
+    { 9, "Others" }
+    };
 
         string GetProductTypeTitle(int productType)
         {
@@ -31,9 +38,9 @@
     }
 
     <section class="mb-5">
-        @if (Model != null && Model.Any())
+        @if (Model != null && Model.Products.Any())
         {
-            var groupedProducts = Model.GroupBy(p => p.Type);
+            var groupedProducts = Model.Products.GroupBy(p => p.Type);
             foreach (var group in groupedProducts)
             {
                 string productTypeTitle = GetProductTypeTitle(group.Key);
@@ -57,111 +64,132 @@
                     </div>
                 }
             }
+        }
+    </section>
 
-
-            @foreach (var product in Model)
-            {
-                <div class="modal fade" id="productModal_@product.Id" tabindex="-1"
-                    aria-labelledby="productModalLabel_@product.Id" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="productModalLabel_@product.Id">@product.Name</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-
-                                <div class="row">
-
-                                    <!-- Image -->
-                                    <div class="mb-3 col-lg-5">
-                                        <img src="@product.ImageURL" alt="" class="img-thumbnail img-fluid">
-                                    </div>
-
-                                    <!-- Descrição -->
-                                    <div class="mb-3 col">
-                                        <p>@product.Description</p>
-                                    </div>
-
-
+    <!-- Products Modal -->
+    @if (Model != null && Model.Products.Any())
+    {
+        @foreach (var product in Model.Products)
+        {
+            <div class="modal fade" id="productModal_@product.Id" tabindex="-1" aria-labelledby="productModalLabel_@product.Id"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="productModalLabel_@product.Id">@product.Name</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="mb-3 col-lg-5">
+                                    <img src="@product.ImageURL" alt="" class="img-thumbnail img-fluid">
                                 </div>
-                                <form action="">
-
-                                    <!-- Ingredientes -->
-                                    <div class="m-3">
-                                        <p>Ingredients:</p>
-                                        @foreach (var ingredient in product.Ingredients.Split(','))
+                                <div class="mb-3 col">
+                                    <p>@product.Description</p>
+                                </div>
+                            </div>
+                            <form asp-controller="Home" asp-action="AddToCart" method="post">
+                                <div class="m-3">
+                                    <p>Ingredients:</p>
+                                    @{
+                                        var ingredientsList = product.Ingredients.Split(',');
+                                        for (int i = 0; i < ingredientsList.Length; i++)
                                         {
                                             <div class="form-check form-check-inline">
-
-                                                <input class="form-check-input" type="checkbox" id="ingredient_@ingredient.Trim()"
-                                                    value="@ingredient.Trim()" checked>
-
-                                                <label class="form-check-label"
-                                                    for="ingredient_@ingredient.Trim()">@ingredient.Trim()</label>
+                                                <input class="form-check-input" type="checkbox" id="ingredient_@i"
+                                                    name="SelectedIngredients" value="@i" checked>
+                                                <label class="form-check-label" for="ingredient_@i">@ingredientsList[i].Trim()</label>
+                                                <input type="hidden" name="Ingredients" value="@ingredientsList[i].Trim()" />
                                             </div>
-
                                         }
-
-                                        <!-- Produtos adicionais -->
-                                        <div class="mt-3">
-                                            <p>Additional Products:</p>
-                                            @foreach (var additionalProduct in Model.Where(p => p.Type == 6))
-                                            {
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input additional-product-checkbox" type="checkbox"
-                                                        id="additionalProduct_@additionalProduct.Id" value="@additionalProduct.Id"
-                                                        data-price="@additionalProduct.Price">
-                                                    <label class="form-check-label"
-                                                        for="additionalProduct_@additionalProduct.Id">@additionalProduct.Name</label>
-                                                </div>
-                                            }
-                                        </div>
-
-                                        <!-- Quantidade -->
-                                        <div class="input-group mt-3">
-                                            <button class="btn btn-outline-secondary decrease-quantity" type="button"
-                                                id="decreaseQuantity">-</button>
-                                            <input type="text" class="form-control quantity" id="quantity" value="1">
-                                            <button class="btn btn-outline-secondary increase-quantity" type="button"
-                                                id="increaseQuantity">+</button>
-                                        </div>
-
-
+                                    }
+                                    <div class="mb-3">
+                                        <p>Additional Products:</p>
+                                        @foreach (var additionalProduct in Model.Products.Where(p => p.Type == 6))
+                                        {
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input additional-product-checkbox" type="checkbox"
+                                                    id="additionalProduct_@additionalProduct.Id" name="SelectedAdditionalProducts"
+                                                    value="@additionalProduct.Id" data-price="@additionalProduct.Price">
+                                                <label class="form-check-label"
+                                                    for="additionalProduct_@additionalProduct.Id">@additionalProduct.Name</label>
+                                            </div>
+                                        }
                                     </div>
-
-                                    <!-- Preço -->
-                                    <div class="d-flex justify-content-end">
-                                        <h5 class="text-end">Price: $<span class="total-price" data-price-element data-price="@product.Price">@product.Price</span></h5>
+                                    <div class="input-group mt-3">
+                                        <button class="btn btn-outline-secondary decrease-quantity" type="button"
+                                            id="decreaseQuantity">-</button>
+                                        <input type="text" class="form-control quantity" id="quantity" value="1">
+                                        <button class="btn btn-outline-secondary increase-quantity" type="button"
+                                            id="increaseQuantity">+</button>
                                     </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="button" class="btn btn-primary">Add to cart</button>
-                                    </div>
-                                </form>
-                            </div>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <h5 class="text-end">Price: $<span class="total-price" data-price-element
+                                            data-price="@product.Price">@product.Price</span></h5>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Add to cart</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            }
+            </div>
         }
-    </section>
+    }
 </div>
 
-
 <!--OffCanvas-->
-<div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"
+<div class="offcanvas offcanvas-start" data-bs-backdrop="false" tabindex="-1" id="staticBackdrop"
     aria-labelledby="staticBackdropLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="staticBackdropLabel">Offcanvas</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <div>
-            I will not close if you click outside of me.
-        </div>
+        <table id="cartTable" class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Ingredients</th>
+                    <th>Additional Products</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model != null && Model.Products.Any())
+                {
+                    @foreach (var cartItem in Model.Products)
+                    {
+                        <tr>
+                            <td>@cartItem.Name</td>
+                            <td>@cartItem.Ingredients</td>
+                            <td>
+                                @if (Model.SelectedAdditionalProducts != null)
+                                {
+                                    foreach (var additionalProductId in Model.SelectedAdditionalProducts)
+                                    {
+                                        var selectedProduct = Model.Products.FirstOrDefault(p => p.Id == additionalProductId);
+                                        if (selectedProduct != null)
+                                        {
+                                            <span>@selectedProduct.Name</span>
+                                        }
+                                    }
+                                }
+                            </td>
+                            <td>$@cartItem.Price</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+
+            </tbody>
+        </table>
+        <div id="totalPrice"></div>
     </div>
 </div>
 

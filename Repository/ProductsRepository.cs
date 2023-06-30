@@ -43,7 +43,7 @@ namespace EasyProduct.Repository
         {
             ProductsModel productDB = SearcheForId(products.Id);
             if (productDB == null) throw new Exception("There was an error to edit, this product does not exist");
-            
+
             productDB.Name = products.Name;
             productDB.Ingredients = products.Ingredients;
             productDB.Description = products.Description;
