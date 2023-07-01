@@ -11,6 +11,7 @@ builder.Services.AddEntityFrameworkSqlServer().AddDbContext<BancoContext>(option
 
 // Adicionar injecao de dependencia
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
+builder.Services.AddScoped<IProductsCartRepository, ProductsCartRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

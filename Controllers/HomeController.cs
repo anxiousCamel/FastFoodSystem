@@ -8,46 +8,38 @@ namespace EasyProduct.Controllers
     public class HomeController : Controller
     {
         private readonly IProductsRepository _productsRepository;
-        private static List<ProductCartModel> _cartItems = new List<ProductCartModel>();
+        private readonly IProductsCartRepository _productsCartRepository;
 
-        public HomeController(IProductsRepository productsRepository)
+        public HomeController(IProductsRepository productsRepository, IProductsCartRepository productsCartRepository)
         {
             _productsRepository = productsRepository;
+            _productsCartRepository = productsCartRepository;
         }
 
         public IActionResult Index()
         {
             List<ProductsModel> products = _productsRepository.SearcheAll();
+            List<ProductCartModel> cartItems = _productsCartRepository.GetCartItems();
 
-            var viewModel = new ProductCartModel
+            var viewModel = new GroupModel
             {
-                Products = products
+                Products = products,
+                Cart = cartItems
             };
 
-            return View(viewModel); // Passando o modelo correto para a View
+            return View(viewModel);
         }
 
         [HttpPost]
         public IActionResult AddToCart(ProductCartModel model)
         {
-            // Acessar as propriedades do formulário
-            List<int> selectedIngredients = model.SelectedIngredients;
-            string ingredients = model.Ingredients;
-            int quantity = model.Quantity;
-
-            // Processar os dados do formulário e adicionar ao carrinho
-            var product = _productsRepository.SearcheForId(model.ProductId);
-            var cartItem = new ProductCartModel
+            if (ModelState.IsValid)
             {
-                Product = product,
-                SelectedIngredients = selectedIngredients,
-                Ingredients = ingredients,
-                Quantity = quantity
-            };
-            _cartItems.Add(cartItem);
+                List<int> selectedIngredients = model.SelectedIngredients.Split(',').Select(int.Parse).ToList();
+                List<int> selectedAdditionalProducts = model.SelectedAdditionalProductsId.Split(',').Select(int.Parse).ToList();
 
-            // Atualizar a exibição do carrinho
-            // Você pode passar os dados do carrinho para a mesma página ou utilizar AJAX para atualizar somente o off-canvas
+                _productsCartRepository.AddToCart(model.ProductId, selectedIngredients, selectedAdditionalProducts, model.Quantity);
+            }
 
             return RedirectToAction("Index");
         }
@@ -55,7 +47,16 @@ namespace EasyProduct.Controllers
         [HttpGet]
         public IActionResult GetCartItems()
         {
-            return PartialView("_CartItems", _cartItems);
+            List<ProductCartModel> cartItems = _productsCartRepository.GetCartItems();
+
+            if (cartItems.Any())
+            {
+                return PartialView("_CartItems", cartItems);
+            }
+            else
+            {
+                return PartialView("_EmptyCart");
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

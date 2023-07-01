@@ -1,4 +1,4 @@
-﻿@model EasyProduct.Models.ProductCartModel
+﻿@model EasyProduct.Models.GroupModel
 
 @{
     ViewData["Title"] = "Index Client";
@@ -90,6 +90,7 @@
                                 </div>
                             </div>
                             <form asp-controller="Home" asp-action="AddToCart" method="post">
+                                <input type="hidden" name="SelectedProductId" value="@product.Id" />
                                 <div class="m-3">
                                     <p>Ingredients:</p>
                                     @{
@@ -100,7 +101,6 @@
                                                 <input class="form-check-input" type="checkbox" id="ingredient_@i"
                                                     name="SelectedIngredients" value="@i" checked>
                                                 <label class="form-check-label" for="ingredient_@i">@ingredientsList[i].Trim()</label>
-                                                <input type="hidden" name="Ingredients" value="@ingredientsList[i].Trim()" />
                                             </div>
                                         }
                                     }
@@ -160,38 +160,45 @@
                 </tr>
             </thead>
             <tbody>
-
-                @if (Model != null && Model.Products.Any())
+                <!-- Adicionei uma verificação para exibir os itens somente se a lista não estiver vazia -->
+                @if (Model != null && Model.Cart != null && Model.Cart.Any())
                 {
-                    @foreach (var cartItem in Model.Products)
+                    @foreach (var cartItem in Model.Cart)
                     {
-                        <tr>
-                            <td>@cartItem.Name</td>
-                            <td>@cartItem.Ingredients</td>
-                            <td>
-                                @if (Model.SelectedAdditionalProducts != null)
-                                {
-                                    foreach (var additionalProductId in Model.SelectedAdditionalProducts)
+                        var product = Model.Products.FirstOrDefault(p => p.Id == cartItem.ProductId);
+                        if (product != null)
+                        {
+                            <tr>
+                                <td>@product.Name</td>
+                                <td>@cartItem.SelectedIngredients</td>
+                                <td>
+                                    @foreach (var additionalProductId in cartItem.SelectedAdditionalProductsId.Split(','))
                                     {
-                                        var selectedProduct = Model.Products.FirstOrDefault(p => p.Id == additionalProductId);
+                                        var selectedProduct = Model.Products.FirstOrDefault(p => p.Id == int.Parse(additionalProductId));
                                         if (selectedProduct != null)
                                         {
                                             <span>@selectedProduct.Name</span>
                                         }
                                     }
-                                }
-                            </td>
-                            <td>$@cartItem.Price</td>
-                        </tr>
+                                </td>
+                                <td>$@product.Price</td>
+                            </tr>
+                        }
                     }
                 }
-            </tbody>
-
+                else
+                {
+                    <!-- Exibe uma mensagem de carrinho vazio -->
+                    <tr>
+                        <td colspan="4">No items in the cart.</td>
+                    </tr>
+                }
             </tbody>
         </table>
         <div id="totalPrice"></div>
     </div>
 </div>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script src="/js/ShoppingCart.js"></script>

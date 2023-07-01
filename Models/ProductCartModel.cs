@@ -7,13 +7,12 @@ namespace EasyProduct.Models
 {
     public class ProductCartModel
     {
-        public int ProductId { get; set; }
-        public List<ProductsModel> Products { get; set; } = null!;
-        public ProductsModel Product { get; set; } = null!;
-        public List<int> SelectedIngredients { get; set; } = null!;
-        public List<int> SelectedAdditionalProducts { get; set; } = null!;
-        public string Ingredients { get; set; } = null!;
-        public int Quantity { get; set; }
 
+        public int Id { get; set; }
+        public int ProductId { get; set; }
+        public string SelectedIngredients { get; set; } = null!;
+        public string SelectedAdditionalProductsId { get; set; }  = null!;
+        public string Ingredients { get; set; }  = null!;
+        public int Quantity { get; set; }
     }
 }
