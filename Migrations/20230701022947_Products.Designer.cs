@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyProduct.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20230624232544_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230701022947_Products")]
+    partial class Products
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
