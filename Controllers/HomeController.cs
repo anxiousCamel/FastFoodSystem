@@ -33,13 +33,7 @@ namespace EasyProduct.Controllers
         [HttpPost]
         public IActionResult AddToCart(ProductCartModel model)
         {
-            if (ModelState.IsValid)
-            {
-                List<int> selectedIngredients = model.SelectedIngredients.Split(',').Select(int.Parse).ToList();
-                List<int> selectedAdditionalProducts = model.SelectedAdditionalProductsId.Split(',').Select(int.Parse).ToList();
-
-                _productsCartRepository.AddToCart(model.ProductId, selectedIngredients, selectedAdditionalProducts, model.Quantity);
-            }
+            _productsCartRepository.AddToCart(model);
 
             return RedirectToAction("Index");
         }

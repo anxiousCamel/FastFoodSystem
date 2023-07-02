@@ -5,62 +5,58 @@ using System.Threading.Tasks;
 using EasyProduct.Models;
 using EasyProduct.Repository.Interface;
 using EasyProduct.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace EasyProduct.Repository
 {
     public class ProductsCartRepository : IProductsCartRepository
     {
-        private static List<ProductCartModel> _cartItems = new List<ProductCartModel>();
+        private readonly BancoContext _BancoContext;
         private readonly IProductsRepository _productsRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ProductsCartRepository(IProductsRepository productsRepository)
+        public ProductCartModel SearcheForId(int id)
         {
-            _productsRepository = productsRepository;
+            return _BancoContext.ProductCarts.FirstOrDefault(x => x.Id == id) ?? new ProductCartModel();
         }
 
-        public void AddToCart(int productId, List<int> selectedIngredients, List<int> selectedAdditionalProducts, int quantity)
+        public ProductsCartRepository(BancoContext bancoContext, IProductsRepository productsRepository, IHttpContextAccessor httpContextAccessor)
         {
-            var product = _productsRepository.SearcheForId(productId);
+            _BancoContext = bancoContext;
+            _productsRepository = productsRepository;
+            _httpContextAccessor = httpContextAccessor;
+        }
 
-            var cartItem = new ProductCartModel
-            {
-                ProductId = productId, // Armazena apenas o ID do produto
-                SelectedAdditionalProductsId = string.Join(",", selectedAdditionalProducts),
-                SelectedIngredients = string.Join(",", selectedIngredients),
-                Quantity = quantity
-            };
-            _cartItems.Add(cartItem);
+        public ProductCartModel AddToCart(ProductCartModel cartItem)
+        {
+            // Obtenha todos os checkboxes marcados
+            var selectedIngredients = _httpContextAccessor.HttpContext.Request.Form["model.SelectedIngredients"];
+            var selectedAdditionalProducts = _httpContextAccessor.HttpContext.Request.Form["model.SelectedAdditionalProductsId"];
+
+            // Concatene os IDs dos produtos adicionais em uma única string separada por vírgulas
+            cartItem.SelectedAdditionalProductsId = string.Join(",", selectedAdditionalProducts);
+            cartItem.SelectedIngredients = string.Join(",", selectedIngredients);
+
+            _BancoContext.ProductCarts.Add(cartItem);
+            _BancoContext.SaveChanges();
+
+            return cartItem;
         }
 
         public List<ProductCartModel> GetCartItems()
         {
-            var cartItemsWithProducts = new List<ProductCartModel>();
-
-            foreach (var cartItem in _cartItems)
-            {
-                var product = _productsRepository.SearcheForId(cartItem.ProductId);
-                if (product != null)
-                {
-                    var cartItemWithProduct = new ProductCartModel
-                    {
-                        Id = cartItem.Id,
-                        ProductId = cartItem.ProductId,
-                        SelectedIngredients = cartItem.SelectedIngredients,
-                        SelectedAdditionalProductsId = cartItem.SelectedAdditionalProductsId,
-                        Ingredients = cartItem.Ingredients,
-                        Quantity = cartItem.Quantity
-                    };
-
-                    cartItemsWithProducts.Add(cartItemWithProduct);
-                }
-            }
-
-            return cartItemsWithProducts;
+            return _BancoContext.ProductCarts.ToList();
         }
 
-        public void ClearCart()
+        public bool ClearCart(int Id)
         {
-            _cartItems.Clear();
+            ProductCartModel productDB = SearcheForId(Id);
+            if (productDB == null) throw new Exception("There was an error to delete, this product does not exist");
+            _BancoContext.ProductCarts.RemoveRange(productDB);
+            _BancoContext.SaveChanges();
+
+            return true;
         }
+
     }
 }

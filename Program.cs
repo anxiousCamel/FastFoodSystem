@@ -3,6 +3,7 @@ using EasyProduct.Data;
 using EasyProduct.Repository.Interface;
 using EasyProduct.Repository;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Configurar os bancos de dados
@@ -15,6 +16,7 @@ builder.Services.AddScoped<IProductsCartRepository, ProductsCartRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

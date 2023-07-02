@@ -11,8 +11,7 @@ namespace EasyProduct.Models
         public int Id { get; set; }
         public int ProductId { get; set; }
         public string SelectedIngredients { get; set; } = null!;
-        public string SelectedAdditionalProductsId { get; set; }  = null!;
-        public string Ingredients { get; set; }  = null!;
+        public string SelectedAdditionalProductsId { get; set; } = null!;
         public int Quantity { get; set; }
     }
 }
