@@ -29,29 +29,50 @@ namespace EasyProduct.Repository
 
         public ProductCartModel AddToCart(ProductCartModel cartItem)
         {
-            // Obtenha todos os checkboxes marcados
-            var selectedIngredients = _httpContextAccessor.HttpContext.Request.Form["model.SelectedIngredients"];
-            var selectedAdditionalProducts = _httpContextAccessor.HttpContext.Request.Form["model.SelectedAdditionalProductsId"];
+            var httpContext = _httpContextAccessor?.HttpContext;
+            if (httpContext != null)
+            {
+                var selectedIngredients = httpContext.Request.Form["model.SelectedIngredients"];
+                var selectedAdditionalProducts = httpContext.Request.Form["model.SelectedAdditionalProductsId"];
 
-            // Concatene os IDs dos produtos adicionais em uma única string separada por vírgulas
-            cartItem.SelectedAdditionalProductsId = string.Join(",", selectedAdditionalProducts);
-            cartItem.SelectedIngredients = string.Join(",", selectedIngredients);
+                if (selectedIngredients.Count > 0)
+                {
+                    // Concatene os IDs dos produtos adicionais em uma única string separada por vírgulas
+                    cartItem.SelectedAdditionalProductsId = string.Join(",", selectedAdditionalProducts);
+                    cartItem.SelectedIngredients = string.Join(",", selectedIngredients);
+                }
 
-            _BancoContext.ProductCarts.Add(cartItem);
-            _BancoContext.SaveChanges();
+                _BancoContext.ProductCarts.Add(cartItem);
+                _BancoContext.SaveChanges();
+            }
 
             return cartItem;
         }
-
         public List<ProductCartModel> GetCartItems()
         {
             return _BancoContext.ProductCarts.ToList();
         }
 
-        public bool ClearCart(int Id)
+        public ProductCartModel EditProductCart(ProductCartModel products)
+        {
+            ProductCartModel productDB = SearcheForId(products.Id);
+            if (productDB == null) throw new Exception("There was an error to edit, this product does not exist");
+
+            productDB.Quantity = products.Quantity;
+            productDB.SelectedIngredients = products.SelectedIngredients;
+            productDB.SelectedAdditionalProductsId = products.SelectedAdditionalProductsId;
+
+            _BancoContext.ProductCarts.Update(productDB);
+            _BancoContext.SaveChanges();
+
+            return productDB;
+        }
+
+        public bool RemoveToCart(int Id)
         {
             ProductCartModel productDB = SearcheForId(Id);
             if (productDB == null) throw new Exception("There was an error to delete, this product does not exist");
+            
             _BancoContext.ProductCarts.RemoveRange(productDB);
             _BancoContext.SaveChanges();
 

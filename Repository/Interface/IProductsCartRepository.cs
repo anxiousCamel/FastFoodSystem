@@ -8,9 +8,10 @@ namespace EasyProduct.Repository.Interface
 {
     public interface IProductsCartRepository
     {
+        List<ProductCartModel> GetCartItems();
         ProductCartModel SearcheForId (int id);
         ProductCartModel AddToCart(ProductCartModel cartItem);
-        List<ProductCartModel> GetCartItems();
-        bool ClearCart(int Id);
+        ProductCartModel EditProductCart (ProductCartModel products);
+        bool RemoveToCart(int Id);
     }
 }

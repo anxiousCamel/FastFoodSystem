@@ -53,6 +53,19 @@ namespace EasyProduct.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult Edit(ProductCartModel products)
+        {
+            ProductCartModel edited = _productsCartRepository.EditProductCart(products);
+            return Json(new { edited = edited });
+        }
+
+        public IActionResult RemoveToCart (int id)
+        {
+            bool removed = _productsCartRepository.RemoveToCart(id);
+            return Json(new { removed = removed });
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

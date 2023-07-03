@@ -141,25 +141,22 @@
     }
 </div>
 
-<!--OffCanvas-->
-<div class="offcanvas offcanvas-start" data-bs-backdrop="false" tabindex="-1" id="staticBackdrop"
-    aria-labelledby="staticBackdropLabel">
+<!-- OffCanvas -->
+<div class="offcanvas offcanvas-start" data-bs-backdrop="false" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="staticBackdropLabel">Offcanvas</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <table id="cartTable" class="table">
+        <table id="cartTable" class="table table-sm">
             <thead>
                 <tr>
                     <th>Product</th>
-                    <th>Ingredients</th>
-                    <th>Additional Products</th>
                     <th>Price</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Adicionei uma verificação para exibir os itens somente se a lista não estiver vazia -->
                 @if (Model != null && Model.Cart != null && Model.Cart.Any())
                 {
                     @foreach (var cartItem in Model.Cart)
@@ -167,29 +164,21 @@
                         var product = Model.Products.FirstOrDefault(p => p.Id == cartItem.ProductId);
                         if (product != null)
                         {
-                            <tr>
+                            <tr id="cartItem-@cartItem.Id">
                                 <td>@product.Name</td>
-                                <td>@cartItem.SelectedIngredients</td>
-                                <td>
-                                    @foreach (var additionalProductId in cartItem.SelectedAdditionalProductsId.Split(','))
-                                    {
-                                        var selectedProduct = Model.Products.FirstOrDefault(p => p.Id == int.Parse(additionalProductId));
-                                        if (selectedProduct != null)
-                                        {
-                                            <span>@selectedProduct.Name</span>
-                                        }
-                                    }
-                                </td>
                                 <td>$@product.Price</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm remove-button" data-id="@cartItem.Id"><i class="bi bi-trash2-fill no-collapse"></i></button>
+                                    <button type="button" class="btn btn-warning btn-sm edit-button" data-id="@cartItem.Id"><i class="bi bi-trash2-fill no-collapse"></i></button>
+                                </td>
                             </tr>
                         }
                     }
                 }
                 else
                 {
-                    <!-- Exibe uma mensagem de carrinho vazio -->
                     <tr>
-                        <td colspan="4">No items in the cart.</td>
+                        <td colspan="3">No items in the cart.</td>
                     </tr>
                 }
             </tbody>
@@ -199,5 +188,7 @@
 </div>
 
 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/js/ShoppingCart.js"></script>

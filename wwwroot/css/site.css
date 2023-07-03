@@ -16,3 +16,7 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.custom-table td {
+  padding: 0.5rem; /* Ajuste o valor conforme necessário */
+}
