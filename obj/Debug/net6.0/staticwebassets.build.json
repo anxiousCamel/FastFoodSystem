@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "CM0zwf2pzj/+7FLS3jkKiNmmlYzDleNm4GR5J3xSjao=",
+  "Hash": "U39TJNIGcwd1oVvvSjJyBrm3YmCTzK93qry55rbtEc8=",
   "Source": "EasyProduct",
   "BasePath": "_content/EasyProduct",
   "Mode": "Default",
@@ -102,6 +102,23 @@
       "OriginalItemSpec": "wwwroot/js/ChangeImage.js"
     },
     {
+      "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/js/HomeActions.js",
+      "SourceId": "EasyProduct",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/",
+      "BasePath": "_content/EasyProduct",
+      "RelativePath": "js/HomeActions.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/js/HomeActions.js"
+    },
+    {
       "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/js/ShoppingCart.js",
       "SourceId": "EasyProduct",
       "SourceType": "Discovered",
@@ -117,23 +134,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/js/ShoppingCart.js"
-    },
-    {
-      "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/js/site.js",
-      "SourceId": "EasyProduct",
-      "SourceType": "Discovered",
-      "ContentRoot": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/",
-      "BasePath": "_content/EasyProduct",
-      "RelativePath": "js/site.js",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/js/site.js"
     },
     {
       "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.css",

@@ -31,6 +31,13 @@ namespace EasyProduct.Controllers
         }
 
         [HttpPost]
+        public ActionResult GetProductInfo(int Id)
+        {
+            var productInfo = _productsCartRepository.GetProductInfo(Id);
+            return Json(new { success = true, product = productInfo });
+        }
+
+        [HttpPost]
         public IActionResult AddToCart(ProductCartModel model)
         {
             _productsCartRepository.AddToCart(model);
@@ -42,15 +49,7 @@ namespace EasyProduct.Controllers
         public IActionResult GetCartItems()
         {
             List<ProductCartModel> cartItems = _productsCartRepository.GetCartItems();
-
-            if (cartItems.Any())
-            {
-                return PartialView("_CartItems", cartItems);
-            }
-            else
-            {
-                return PartialView("_EmptyCart");
-            }
+            return PartialView(cartItems);
         }
 
         [HttpPost]
@@ -60,7 +59,8 @@ namespace EasyProduct.Controllers
             return Json(new { edited = edited });
         }
 
-        public IActionResult RemoveToCart (int id)
+        [HttpPost]
+        public IActionResult RemoveToCart(int id)
         {
             bool removed = _productsCartRepository.RemoveToCart(id);
             return Json(new { removed = removed });

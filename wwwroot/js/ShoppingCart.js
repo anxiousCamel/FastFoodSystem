@@ -68,22 +68,3 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
-
-
-// Função para remover um produto do carrinho
-$(document).ready(function () {
-    $('.remove-button').click(function () {
-        var itemId = $(this).data('id');
-        $.ajax({
-            url: '/Home/RemoveToCart',
-            type: 'POST',
-            data: { id: itemId },
-            success: function (result) {
-                if (result.removed) {
-                    $('#cartItem-' + itemId).remove();
-                    $('#totalPrice').text(result.totalPrice);
-                }
-            }
-        });
-    });
-});

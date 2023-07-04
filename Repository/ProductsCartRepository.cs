@@ -14,18 +14,36 @@ namespace EasyProduct.Repository
         private readonly BancoContext _BancoContext;
         private readonly IProductsRepository _productsRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public ProductCartModel SearcheForId(int id)
-        {
-            return _BancoContext.ProductCarts.FirstOrDefault(x => x.Id == id) ?? new ProductCartModel();
-        }
-
         public ProductsCartRepository(BancoContext bancoContext, IProductsRepository productsRepository, IHttpContextAccessor httpContextAccessor)
         {
             _BancoContext = bancoContext;
             _productsRepository = productsRepository;
             _httpContextAccessor = httpContextAccessor;
         }
+
+        public ProductCartModel SearcheForId(int id)
+        {
+            return _BancoContext.ProductCarts.FirstOrDefault(x => x.Id == id) ?? new ProductCartModel();
+        }
+
+        public ProductCartModel GetProductInfo(int productId)
+        {
+            var productCart = SearcheForId(productId);
+
+            // Verificar se o produto foi encontrado
+            if (productCart == null) throw new Exception("There was an error to edit, this product does not exist");
+
+            // Mapear as informações do produto para o modelo ProductInfoModel
+            var productInfo = new ProductCartModel
+            {
+                ProductId = productCart.ProductId,
+                SelectedAdditionalProductsId = productCart.SelectedAdditionalProductsId,
+                SelectedIngredients = productCart.SelectedIngredients
+            };
+
+            return productInfo;
+        }
+
 
         public ProductCartModel AddToCart(ProductCartModel cartItem)
         {
@@ -72,7 +90,7 @@ namespace EasyProduct.Repository
         {
             ProductCartModel productDB = SearcheForId(Id);
             if (productDB == null) throw new Exception("There was an error to delete, this product does not exist");
-            
+
             _BancoContext.ProductCarts.RemoveRange(productDB);
             _BancoContext.SaveChanges();
 
