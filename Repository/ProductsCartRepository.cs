@@ -50,15 +50,14 @@ namespace EasyProduct.Repository
             var httpContext = _httpContextAccessor?.HttpContext;
             if (httpContext != null)
             {
-                var selectedIngredients = httpContext.Request.Form["model.SelectedIngredients"];
-                var selectedAdditionalProducts = httpContext.Request.Form["model.SelectedAdditionalProductsId"];
 
+                var selectedIngredients = httpContext.Request.Form["model.SelectedIngredients"];
                 if (selectedIngredients.Count > 0)
-                {
-                    // Concatene os IDs dos produtos adicionais em uma única string separada por vírgulas
-                    cartItem.SelectedAdditionalProductsId = string.Join(",", selectedAdditionalProducts);
-                    cartItem.SelectedIngredients = string.Join(",", selectedIngredients);
-                }
+                { cartItem.SelectedIngredients = string.Join(",", selectedIngredients); }
+
+                var selectedAdditionalProducts = httpContext.Request.Form["model.SelectedAdditionalProductsId"];
+                if (selectedAdditionalProducts.Count > 0)
+                { cartItem.SelectedAdditionalProductsId = string.Join(",", selectedAdditionalProducts); }
 
                 _BancoContext.ProductCarts.Add(cartItem);
                 _BancoContext.SaveChanges();
@@ -71,14 +70,29 @@ namespace EasyProduct.Repository
             return _BancoContext.ProductCarts.ToList();
         }
 
-        public ProductCartModel EditProductCart(ProductCartModel products)
+        public ProductCartModel EditProduct(ProductCartModel product)
         {
-            ProductCartModel productDB = SearcheForId(products.Id);
-            if (productDB == null) throw new Exception("There was an error to edit, this product does not exist");
+            ProductCartModel productDB = SearcheForId(product.Id);
+            if (productDB == null)
+            {
+                throw new Exception("There was an error editing the product. The product does not exist.");
+            }
 
-            productDB.Quantity = products.Quantity;
-            productDB.SelectedIngredients = products.SelectedIngredients;
-            productDB.SelectedAdditionalProductsId = products.SelectedAdditionalProductsId;
+            var httpContext = _httpContextAccessor?.HttpContext;
+            if (httpContext != null)
+            {
+                var selectedIngredients = httpContext.Request.Form["SelectedIngredients"];
+                if (selectedIngredients.Count > 0)
+                { product.SelectedIngredients = string.Join(",", selectedIngredients); }
+
+                var selectedAdditionalProducts = httpContext.Request.Form["SelectedAdditionalProductsId"];
+                if (selectedAdditionalProducts.Count > 0)
+                { product.SelectedAdditionalProductsId = string.Join(",", selectedAdditionalProducts); }
+            }
+
+            productDB.Quantity = product.Quantity;
+            productDB.SelectedIngredients = product.SelectedIngredients;
+            productDB.SelectedAdditionalProductsId = product.SelectedAdditionalProductsId;
 
             _BancoContext.ProductCarts.Update(productDB);
             _BancoContext.SaveChanges();
@@ -96,6 +110,5 @@ namespace EasyProduct.Repository
 
             return true;
         }
-
     }
 }

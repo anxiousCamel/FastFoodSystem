@@ -17,9 +17,10 @@ $(document).ready(function () {
     });
 });
 
+// Funçoes para EDITAR um produto do carrinho
 $('.edit-button').click(function () {
     var productId = $(this).data('id');
-    var product = getProductInfo(productId); // Função para obter as informações do produto do servidor
+    var product = GetProductInfo(productId); // Função para obter as informações do produto do servidor
 
     // Preencher os campos da modal com as informações do produto
     $('#productId').val(productId);
@@ -30,6 +31,7 @@ $('.edit-button').click(function () {
     // Abrir a modal após preencher os campos
     $('#productModal').modal('show');
 });
+
 
 $('#saveButton').click(function () {
     var formData = $('#productModal form').serialize(); // Serializar os dados do formulário
@@ -43,10 +45,8 @@ $('#saveButton').click(function () {
             var editedProduct = response.edited;
 
             // Atualizar os dados do produto no carrinho na página
-            // Aqui está um exemplo genérico para atualizar os dados:
             var cartItemRow = $('#cartItem-' + editedProduct.Id);
             cartItemRow.find('td[data-bs-toggle]').text('$' + editedProduct.Price);
-            // Atualizar outras informações do produto exibidas na página, se necessário
 
             $('#productModal').modal('hide');
         },
@@ -84,15 +84,4 @@ function openProductModal(cartItemId, productId) {
             console.log(error);
         }
     });
-}
-
-function getProductInfo(productId) {
-    // Lógica para obter as informações do produto do servidor
-    // Retorne as informações do produto como um objeto JavaScript
-    // Exemplo:
-    return {
-        Ingredients: "Ingredient 1, Ingredient 2",
-        AdditionalProducts: "Product 1, Product 2",
-        Quantity: 1
-    };
 }

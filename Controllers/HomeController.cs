@@ -53,10 +53,10 @@ namespace EasyProduct.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(ProductCartModel products)
+        public IActionResult Edit(ProductCartModel product)
         {
-            ProductCartModel edited = _productsCartRepository.EditProductCart(products);
-            return Json(new { edited = edited });
+            _productsCartRepository.EditProduct(product);
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

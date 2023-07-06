@@ -122,7 +122,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Add to cart</button>
+                                    <button type="submit" class="btn btn-success">Add to cart</button>
                                 </div>
                             </form>
                         </div>
@@ -210,6 +210,7 @@
     </div>
 </div>
 
+
 @if (Model != null && Model.Cart != null && Model.Cart.Any())
 {
     @foreach (var cartItem in Model.Cart)
@@ -221,47 +222,68 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editProductModalLabel_@product.Id">Edit Product: @product.Name</h5>
+                            <h5 class="modal-title" id="editProductModalLabel_@cartItem.Id">Edit @product.Name</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+
                         <div class="modal-body">
-                            <form>
-                                <div class="form-group">
-                                    <label for="editQuantity_@product.Id">Quantity:</label>
-                                    <input type="text" class="form-control" id="editQuantity_@product.Id" value="@cartItem.Quantity">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <img src="@product.ImageURL" alt="@product.Name" class="img-thumbnail img-fluid">
                                 </div>
-                                <div class="form-group">
-                                    <label for="editIngredients_@product.Id">Ingredients:</label>
+                                <div class="col">
+                                    <p>@product.Description</p>
+                                </div>
+                            </div>
+
+                            <form asp-controller="Home" asp-action="Edit" method="post">
+
+                                <!-- Id -->
+                                <input type="hidden" name="Id" value="@cartItem.Id" />
+
+                                <!-- ingredient -->
+                                <div class="form-group mt-3">
+                                    <label for="editIngredients_@product.Id">Ingredients: </label>
                                     @foreach (var ingredient in product.Ingredients.Split(','))
                                     {
                                         bool isChecked = cartItem.SelectedIngredients?.Split(',').Contains(ingredient.Trim()) ?? false;
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="editIngredient_@product.Id-@ingredient" name="editModel.SelectedIngredients" value="@ingredient.Trim()" @(isChecked ? "checked" : "")>
+                                            <input class="form-check-input" type="checkbox" id="editIngredient_@product.Id-@ingredient" value="@ingredient.Trim()" name="SelectedIngredients" checked="@isChecked" />
                                             <label class="form-check-label" for="editIngredient_@product.Id-@ingredient">@ingredient.Trim()</label>
                                         </div>
                                     }
                                 </div>
-                                <div class="form-group">
-                                    <label for="editAdditionalIngredients_@product.Id">Additional Ingredients:</label>
-                                    <ul>
-                                        @foreach (var additionalProduct in Model.Products.Where(p => p.Type == 6))
-                                        {
-                                            bool isAdditionalProductSelected = cartItem.SelectedAdditionalProductsId?.Split(',').Contains(additionalProduct.Id.ToString()) ?? false;
-                                            <li>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input additional-product-checkbox" type="checkbox" id="editAdditionalProduct_@product.Id-@additionalProduct.Id" name="editModel.SelectedAdditionalProductsId" value="@additionalProduct.Id" @(isAdditionalProductSelected ? "checked" : "")>
-                                                    <label class="form-check-label" for="editAdditionalProduct_@product.Id-@additionalProduct.Id">@additionalProduct.Name</label>
-                                                </div>
-                                            </li>
-                                        }
-                                    </ul>
+
+                                <!-- additionalProduct -->
+                                <div class="form-group mt-3">
+                                    <label for="editAdditionalIngredients_@product.Id">Additional Ingredients: </label>
+
+                                    @foreach (var additionalProduct in Model.Products.Where(p => p.Type == 6))
+                                    {
+                                        bool isAdditionalProductSelected = cartItem.SelectedAdditionalProductsId?.Split(',').Contains(additionalProduct.Id.ToString()) ?? false;
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input additional-product-checkbox" type="checkbox" id="editAdditionalProduct_@product.Id-@additionalProduct.Id" value="@additionalProduct.Id" name="SelectedAdditionalProductsId" checked="@isAdditionalProductSelected" data-price="@additionalProduct.Price" />
+                                            <label class="form-check-label" for="editAdditionalProduct_@product.Id-@additionalProduct.Id">@additionalProduct.Name - $@additionalProduct.Price</label>
+                                        </div>
+                                    }
                                 </div>
-                                <!-- Adicione mais campos conforme necessário -->
+
+                                <!-- Quantity -->
+                                <div class="input-group mt-3 mb-3">
+                                    <button class="btn btn-outline-secondary decrease-quantity" type="button" id="decreaseQuantity">-</button>
+                                    <input type="number" class="form-control quantity" id="editQuantity_@product.Id" name="Quantity" value="@cartItem.Quantity">
+                                    <button class="btn btn-outline-secondary increase-quantity" type="button" id="increaseQuantity">+</button>
+                                </div>
+
+                                <div class="text-end d-flex justify-content-end">
+                                    <h5>Price: $<span class="total-price" data-price-element data-price="@product.Price">@product.Price</span></h5>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
                             </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-primary">Save Changes</button>
                         </div>
                     </div>
                 </div>
