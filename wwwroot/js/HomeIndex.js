@@ -84,11 +84,13 @@ $('.remove-button').click(function () {
             if (result.removed) {
                 $('#cartItem-' + itemId).next('tr').remove();
                 $('#cartItem-' + itemId).remove();
+                $('#payment-' + itemId).next('tr').remove();
+                $('#payment-' + itemId).remove();
 
                 // Obter o novo preço total
                 $.ajax({
                     url: '/Home/GetTotalPrice',
-                    type: 'POST',
+                    type: 'POST',   
                     success: function (response) {
                         // Atualizar o preço total
                         $('.totalCartPrice').text(response.totalPrice);
@@ -106,5 +108,21 @@ $(document).ready(function () {
         $('.selected .fa').removeClass('fa-check');
         $('.radio').removeClass('selected');
         $(this).addClass('selected');
+    });
+});
+
+$(document).ready(function () {
+    $('.payment-option').click(function () {
+        var paymentMethod = $(this).data('payment-method');
+    
+        $('.payment-column').hide(); // Oculta todas as colunas de pagamento
+
+        if (paymentMethod === 'pix') {
+            $('#pixColumn').show();
+        } else if (paymentMethod === 'card') {
+            $('#cardColumn').show();
+        } else if (paymentMethod === 'money') {
+            $('#moneyColumn').show();
+        }
     });
 });

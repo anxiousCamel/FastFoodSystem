@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "aL1vsxLEvfo2rbFCb+ZjSq1yueIVR/zTQpIxFRM0D74=",
+  "Hash": "YKjqGuuuLcC5YOwaLZJPg1S6jejU5LqQ/cVco+/FxoY=",
   "Source": "EasyProduct",
   "BasePath": "_content/EasyProduct",
   "Mode": "Default",
@@ -134,6 +134,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/js/HomeIndex.js"
+    },
+    {
+      "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/js/PaymentMoney.js",
+      "SourceId": "EasyProduct",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/",
+      "BasePath": "_content/EasyProduct",
+      "RelativePath": "js/PaymentMoney.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/js/PaymentMoney.js"
     },
     {
       "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/js/ShoppingCart.js",
