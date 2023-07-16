@@ -1,297 +1,78 @@
 ﻿@model EasyProduct.Models.GroupModel
-
 @{
-    ViewData["Title"] = "Index Client";
+    ViewData["Title"] = "Home";
 }
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+@await Html.PartialAsync("Modals/Product")
+@await Html.PartialAsync("OffCanvas/Cart")
 
+
+@functions {
+    Dictionary<int, string> productTypeNames = new Dictionary<int, string>()
+{
+{ 1, "Hamburgers" },
+{ 2, "Drinks" },
+{ 3, "accompaniments" },
+{ 4, "dessert" },
+{ 5, "Toys" },
+{ 9, "Others" }
+};
+    string GetProductTypeTitle(int productType)
+    {
+        if (productTypeNames.ContainsKey(productType))
+        { return productTypeNames[productType]; }
+        return string.Empty;
+    }
+}
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 <!-- Button offCanvas -->
 <div class="d-flex justify-content-end">
-    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
-        <i class="bi bi-basket-fill"></i>
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
+        aria-controls="staticBackdrop">
+        <i class="bi bi-cart"></i>
     </button>
 </div>
 
-<div>
-    @functions {
-        Dictionary<int, string> productTypeNames = new Dictionary<int, string>()
-        {
-            { 1, "hamburgers" },
-            { 2, "Drinks" },
-            { 3, "accompaniments" },
-            { 4, "dessert" },
-            { 5, "Toys" },
-            { 9, "Others" }
-        };
-
-        string GetProductTypeTitle(int productType)
-        {
-            if (productTypeNames.ContainsKey(productType))
-            {
-                return productTypeNames[productType];
-            }
-
-            return string.Empty;
-        }
-    }
-
-    <section class="mb-5">
-        @if (Model != null && Model.Products.Any())
-        {
-            var groupedProducts = Model.Products.GroupBy(p => p.Type);
-            foreach (var group in groupedProducts)
-            {
-                string productTypeTitle = GetProductTypeTitle(group.Key);
-
-                if (!string.IsNullOrEmpty(productTypeTitle))
-                {
-                    <div class="mb-5">
-                        <h4>@productTypeTitle</h4>
-                        <div class="row row-cols-1 row-cols-md-5 g-4">
-                            @foreach (var product in group)
-                            {
-                                <div class="col">
-                                    <div class="card" data-bs-toggle="modal" data-bs-target="#productModal_@product.Id">
-                                        <img src="@product.ImageURL" class="card-img" alt="...">
-                                        <h6 class="card-title">@product.Name</h6>
-                                        <p class="card-text">$@product.Price</p>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                }
-            }
-        }
-    </section>
-
-    <!-- Products Modal List -->
+<!-- Products List -->
+<section class="mb-5">
     @if (Model != null && Model.Products.Any())
     {
-        @foreach (var product in Model.Products)
+        var groupedProducts = Model.Products.GroupBy(p => p.Type);
+        foreach (var group in groupedProducts)
         {
-            <div class="modal fade" id="productModal_@product.Id" tabindex="-1" aria-labelledby="productModalLabel_@product.Id" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="productModalLabel_@product.Id">@product.Name</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="mb-3 col-lg-5">
-                                    <img src="@product.ImageURL" alt="" class="img-thumbnail img-fluid">
-                                </div>
-                                <div class="mb-3 col">
-                                    <p>@product.Description</p>
-                                </div>
-                            </div>
-                            <form asp-controller="Home" asp-action="AddToCart" method="post">
-                                <input type="hidden" name="model.ProductId" value="@product.Id" />
-                                <div class="m-3">
-                                    <p>Ingredients:</p>
-                                    @{
-                                        var ingredientsList = product.Ingredients.Split(',');
-                                        for (int i = 0; i < ingredientsList.Length; i++)
-                                        {
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="ingredient_@i" name="model.SelectedIngredients" value="@ingredientsList[i].Trim()" checked>
-                                                <label class="form-check-label" for="ingredient_@i">@ingredientsList[i].Trim()</label>
-                                            </div>
-                                        }
-                                    }
-                                    <div class="mt-3">
-                                        <p>Additional Products:</p>
-                                        @foreach (var additionalProduct in Model.Products.Where(p => p.Type == 6))
-                                        {
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input additional-product-checkbox" type="checkbox" id="additionalProduct_@additionalProduct.Id" name="model.SelectedAdditionalProductsId" value="@additionalProduct.Id" data-price="@additionalProduct.Price">
-                                                <label class="form-check-label" for="additionalProduct_@additionalProduct.Id">@additionalProduct.Name</label>
-                                            </div>
-                                        }
-                                    </div>
-                                    <div class="input-group mt-3">
-                                        <button class="btn btn-outline-secondary decrease-quantity" type="button" id="decreaseQuantity">-</button>
-                                        <input type="text" class="form-control quantity" id="quantity" name="model.Quantity" value="1">
-                                        <button class="btn btn-outline-secondary increase-quantity" type="button" id="increaseQuantity">+</button>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <h5 class="text-end">Price: $<span class="total-price" data-price-element data-price="@product.Price">@product.Price</span></h5>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-success">Add to cart</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-    }
-</div>
-
-<!-- Off Canvas -->
-<div class="offcanvas offcanvas-start" data-bs-backdrop="false" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="staticBackdropLabel">Shopping Cart</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        <table id="cartTable" class="table table-sm">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Cart != null && Model.Cart.Any())
-                {
-                    @foreach (var cartItem in Model.Cart)
-                    {
-                        var product = Model.Products.FirstOrDefault(p => p.Id == cartItem.ProductId);
-                        if (product != null)
+            string productTypeTitle = GetProductTypeTitle(group.Key);
+            if (!string.IsNullOrEmpty(productTypeTitle))
+            {
+                <div class="mb-5">
+                    <h4>@productTypeTitle</h4>
+                    <div class="row row-cols-1 row-cols-md-5 g-4">
+                        @foreach (var product in group)
                         {
-                            <tr id="cartItem-@cartItem.Id">
-                                <td data-bs-toggle="collapse" href="#collapse-@cartItem.Id" role="button" aria-expanded="false" aria-controls="collapse-@cartItem.Id">@product.Name</td>
-                                <td data-bs-toggle="collapse" href="#collapse-@cartItem.Id" role="button" aria-expanded="false" aria-controls="collapse-@cartItem.Id">$@product.Price</td>
-                                <td>
-                                    <button type="button" class="btn btn-danger btn-sm remove-button" data-id="@cartItem.Id"><i class="bi bi-trash2-fill"></i></button>
-                                    <button type="button" class="btn btn-warning btn-sm edit-button" data-bs-toggle="modal" data-bs-target="#editProductModal_@cartItem.Id" data-id="@cartItem.Id"></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" class="p-0">
-                                    <div class="p-3 collapse" id="collapse-@cartItem.Id">
-                                        @if (!string.IsNullOrEmpty(cartItem.SelectedIngredients))
-                                        {
-                                            <h6>Ingredients:</h6>
-                                            <ul>
-                                                @foreach (var ingredient in cartItem.SelectedIngredients.Split(','))
-                                                {
-                                                    <li>@ingredient</li>
-                                                }
-                                            </ul>
-                                        }
+                            <div class="col">
+                                <div class="card" data-bs-toggle="modal" data-bs-target="#productModal_@product.Id">
+                                    <div class="badge">Hot </div>
 
-                                        @if (!string.IsNullOrEmpty(cartItem.SelectedAdditionalProductsId))
-                                        {
-                                            <h6 class="mt-3">Additional Ingredients:</h6>
-                                            <ul>
-                                                @foreach (var additionalProductId in cartItem.SelectedAdditionalProductsId.Split(','))
-                                                {
-                                                    var selectedProduct = Model.Products.FirstOrDefault(p => p.Id == int.Parse(additionalProductId));
-                                                    if (selectedProduct != null)
-                                                    {
-                                                        <li>@selectedProduct.Name - R$@selectedProduct.Price</li>
-                                                    }
-                                                }
-                                            </ul>
-                                        }
+                                    <div class="card-img-container">
+                                        <img src="@product.ImageURL" class="card-img" alt="...">
+                                    </div>  
+
+                                    <div class="product-details">
+                                        <h6 class="card-title text">@product.Name</h6>
+                                        <div class="product-bottom-details">
+                                            <div class="product-price"><small>$96.00</small>$@product.Price</div>
+                                        </div>
                                     </div>
-                                </td>
-                            </tr>
-                        }
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="3">No items in the cart.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <div id="totalPrice"></div>
-    </div>
-</div>
-
-
-@if (Model != null && Model.Cart != null && Model.Cart.Any())
-{
-    @foreach (var cartItem in Model.Cart)
-    {
-        var product = Model.Products.FirstOrDefault(p => p.Id == cartItem.ProductId);
-        if (product != null)
-        {
-            <div class="modal fade" id="editProductModal_@cartItem.Id" tabindex="-1" aria-labelledby="editProductModalLabel_@cartItem.Id" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editProductModalLabel_@cartItem.Id">Edit @product.Name</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-lg-5">
-                                    <img src="@product.ImageURL" alt="@product.Name" class="img-thumbnail img-fluid">
-                                </div>
-                                <div class="col">
-                                    <p>@product.Description</p>
                                 </div>
                             </div>
-
-                            <form asp-controller="Home" asp-action="Edit" method="post">
-
-                                <!-- Id -->
-                                <input type="hidden" name="Id" value="@cartItem.Id" />
-
-                                <!-- ingredient -->
-                                <div class="form-group mt-3">
-                                    <label for="editIngredients_@product.Id">Ingredients: </label>
-                                    @foreach (var ingredient in product.Ingredients.Split(','))
-                                    {
-                                        bool isChecked = cartItem.SelectedIngredients?.Split(',').Contains(ingredient.Trim()) ?? false;
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="editIngredient_@product.Id-@ingredient" value="@ingredient.Trim()" name="SelectedIngredients" checked="@isChecked" />
-                                            <label class="form-check-label" for="editIngredient_@product.Id-@ingredient">@ingredient.Trim()</label>
-                                        </div>
-                                    }
-                                </div>
-
-                                <!-- additionalProduct -->
-                                <div class="form-group mt-3">
-                                    <label for="editAdditionalIngredients_@product.Id">Additional Ingredients: </label>
-
-                                    @foreach (var additionalProduct in Model.Products.Where(p => p.Type == 6))
-                                    {
-                                        bool isAdditionalProductSelected = cartItem.SelectedAdditionalProductsId?.Split(',').Contains(additionalProduct.Id.ToString()) ?? false;
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input additional-product-checkbox" type="checkbox" id="editAdditionalProduct_@product.Id-@additionalProduct.Id" value="@additionalProduct.Id" name="SelectedAdditionalProductsId" checked="@isAdditionalProductSelected" data-price="@additionalProduct.Price" />
-                                            <label class="form-check-label" for="editAdditionalProduct_@product.Id-@additionalProduct.Id">@additionalProduct.Name - $@additionalProduct.Price</label>
-                                        </div>
-                                    }
-                                </div>
-
-                                <!-- Quantity -->
-                                <div class="input-group mt-3 mb-3">
-                                    <button class="btn btn-outline-secondary decrease-quantity" type="button" id="decreaseQuantity">-</button>
-                                    <input type="number" class="form-control quantity" id="editQuantity_@product.Id" name="Quantity" value="@cartItem.Quantity">
-                                    <button class="btn btn-outline-secondary increase-quantity" type="button" id="increaseQuantity">+</button>
-                                </div>
-
-                                <div class="text-end d-flex justify-content-end">
-                                    <h5>Price: $<span class="total-price" data-price-element data-price="@product.Price">@product.Price</span></h5>
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Update</button>
-                                </div>
-                            </form>
-                        </div>
+                        }
                     </div>
                 </div>
-            </div>
+            }
         }
     }
-}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</section>
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/js/ShoppingCart.js"></script>
-<script src="/js/HomeActions.js"></script>
+<script src="/js/HomeIndex.js"></script>

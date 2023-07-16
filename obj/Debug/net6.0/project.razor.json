@@ -18384,8 +18384,18 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/Views/Home/OffCanvas/Cart.cshtml",
+      "TargetPath": "Views\\Home\\OffCanvas\\Cart.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/Views/_ViewImports.cshtml",
       "TargetPath": "Views\\_ViewImports.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/Views/Home/Modals/Payment.cshtml",
+      "TargetPath": "Views\\Home\\Modals\\Payment.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -18409,8 +18419,18 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/Views/Home/Modals/Product.cshtml",
+      "TargetPath": "Views\\Home\\Modals\\Product.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/Views/Shared/_ValidationScriptsPartial.cshtml",
       "TargetPath": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/Views/Home/Modals/Edit.cshtml",
+      "TargetPath": "Views\\Home\\Modals\\Edit.cshtml",
       "FileKind": "mvc"
     },
     {

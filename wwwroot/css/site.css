@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
+
 html {
   font-size: 14px;
 }
@@ -15,8 +17,152 @@ html {
 
 body {
   margin-bottom: 60px;
+  font-family: 'Roboto', sans-serif;
 }
 
-.custom-table td {
-  padding: 0.5rem; /* Ajuste o valor conforme necessário */
+a {
+  text-decoration: none;
+}
+
+
+
+
+
+
+
+.pic {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.card-block {
+  width: 200px;
+  border: 1px solid lightgrey;
+  border-radius: 5px !important;
+  background-color: #FAFAFA;
+  margin-bottom: 30px;
+}
+
+.card-body.show {
+  display: block;
+}
+
+.card:hover {
+  box-shadow: 2px 2px 6px 0px rgb(200, 167, 216);
+}
+
+.radio {
+  display: inline-block;
+  border-radius: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: #000;
+  font-weight: 500;
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+
+
+.radio:hover {
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.radio.selected {
+  box-shadow: 0px 8px 16px 0px #EEEEEE;
+  -webkit-filter: grayscale(0%);
+  -moz-filter: grayscale(0%);
+  -o-filter: grayscale(0%);
+  -ms-filter: grayscale(0%);
+  filter: grayscale(0%);
+}
+
+.selected {
+  background-color: #E0F2F1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.badge {
+  position: absolute;
+  left: 0;
+  top: 20px;
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 700;
+  background: red;
+  color: #fff;
+  padding: 3px 10px;
+}
+
+.product-details {
+  padding: 10px;
+}
+
+.product-details h4 a {
+  font-weight: 500;
+  display: block;
+  text-transform: uppercase;
+  color: #363636;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.product-details h4 a:hover {
+  color: #fbb72c;
+}
+
+.product-details p {
+  font-size: 15px;
+  line-height: 22px;
+  color: #999;
+}
+
+.product-bottom-details {
+  overflow: hidden;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.product-bottom-details div {
+  float: left;
+  width: 50%;
+}
+
+.product-price {
+  font-size: 18px;
+  color: #fbb72c;
+  font-weight: 600;
+}
+
+.product-price small {
+  font-size: 80%;
+  font-weight: 400;
+  text-decoration: line-through;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.img-small {
+  width: 50px; /* Defina o tamanho desejado para a imagem */
+  height: 50px;
 }

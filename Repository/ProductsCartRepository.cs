@@ -31,9 +31,12 @@ namespace EasyProduct.Repository
             var productCart = SearcheForId(productId);
 
             // Verificar se o produto foi encontrado
-            if (productCart == null) throw new Exception("There was an error to edit, this product does not exist");
+            if (productCart == null)
+            {
+                throw new Exception("There was an error to edit, this product does not exist");
+            }
 
-            // Mapear as informações do produto para o modelo ProductInfoModel
+            // Mapear as informações do produto para o modelo ProductCartModel
             var productInfo = new ProductCartModel
             {
                 ProductId = productCart.ProductId,
@@ -109,6 +112,44 @@ namespace EasyProduct.Repository
             _BancoContext.SaveChanges();
 
             return true;
+        }
+
+        public bool RemoveAllToCart()
+        {
+            var products = _BancoContext.ProductCarts.ToList();
+            _BancoContext.ProductCarts.RemoveRange(products);
+            _BancoContext.SaveChanges();
+
+            return true;
+        }
+
+        public double CalculateTotalCartPrice()
+        {
+            var totalCartPrice = 0.0;
+            var cartItems = GetCartItems();
+            foreach (var cartItem in cartItems)
+            {
+                var product = _productsRepository.SearcheForId(cartItem.ProductId);
+                if (product != null)
+                {
+                    var additionalProductsTotalPrice = 0.0;
+                    if (!string.IsNullOrEmpty(cartItem.SelectedAdditionalProductsId))
+                    {
+                        var additionalProductIds = cartItem.SelectedAdditionalProductsId.Split(',');
+                        foreach (var additionalProductId in additionalProductIds)
+                        {
+                            var selectedProduct = _productsRepository.SearcheForId(int.Parse(additionalProductId));
+                            if (selectedProduct != null)
+                            {
+                                additionalProductsTotalPrice += selectedProduct.Price;
+                            }
+                        }
+                    }
+                    var totalPrice = (product.Price + additionalProductsTotalPrice) * cartItem.Quantity;
+                    totalCartPrice += totalPrice;
+                }
+            }
+            return totalCartPrice;
         }
     }
 }

@@ -1,0 +1,141 @@
+@model EasyProduct.Models.GroupModel
+
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentModalLabel">Payment Method</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row m-3">
+    <div class="table-responsive col-auto">
+        <div class="radio-group justify-content-between px-3">
+            <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio">
+                <div class="flex-row">
+                    <div class="col">
+                        <div class="pic">
+                            <img class="irc_mut img-fluid"
+                                src="https://devtools.com.br/img/pix/logo-pix-png-icone-520x520.png" width="100"
+                                height="100">
+                        </div>
+                        <p>Pix</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio">
+                <div class="flex-row">
+                    <div class="col">
+                        <div class="pic">
+                            <img class="irc_mut img-fluid" src="https://cdn-icons-png.flaticon.com/512/6963/6963703.png"
+                                width="100" height="100">
+                        </div>
+                        <p>Card</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio">
+                <div class="flex-row">
+                    <div class="col">
+                        <div class="pic">
+                            <img class="irc_mut img-fluid" src="https://cdn-icons-png.flaticon.com/512/925/925014.png"
+                                width="100" height="100">
+                        </div>
+                        <p>Money</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+    <table id="cartTable" class="table table-sm">
+        <thead>
+            <tr>
+                <th>Quantity</th>
+                <th>Product</th>
+                <th>Ingredients</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+             
+            @if (Model != null && Model.Cart != null && Model.Cart.Any())
+            {
+                var totalCartPrice = 0.0;
+                @foreach (var payment in Model.Cart)
+                {
+                    var product = Model.Products.FirstOrDefault(p => p.Id == payment.ProductId);
+
+                    if (product != null)
+                    {
+                        
+                            if (product != null)
+                            {
+                                var additionalProductsTotalPrice = 0.0;
+                                if (!string.IsNullOrEmpty(payment.SelectedAdditionalProductsId))
+                                {
+                                    var additionalProductIds = payment.SelectedAdditionalProductsId.Split(',');
+
+                                    foreach (var additionalProductId in additionalProductIds)
+                                    {
+                                        var selectedProduct = Model.Products.FirstOrDefault(p => p.Id == int.Parse(additionalProductId));
+                                        if (selectedProduct != null)
+                                        {
+                                            additionalProductsTotalPrice += selectedProduct.Price;
+                                        }
+                                    }
+                                }
+                                var totalPrice = (product.Price + additionalProductsTotalPrice) * payment.Quantity;
+                                totalCartPrice += totalPrice;
+                        <tr id="payment-@payment.Id">
+                            <td  role="button" >@payment.Quantity</td>
+                            <td role="button">@product.Name <img src="@product.ImageURL" alt="" class="img-small"></td>
+                            <td  role="button" >@payment.SelectedIngredients @payment.SelectedAdditionalProductsId</td>
+                            <td  role="button" >@additionalProductsTotalPrice</td>
+                        </tr>
+                            }
+                        <tr>
+                            <td colspan="5" class="p-0">
+                                <div class="p-3 collapse" id="collapse-@payment.Id">
+                                    @if (!string.IsNullOrEmpty(payment.SelectedIngredients))
+                                    {
+                                        <h6>Ingredients:</h6>
+                                        <ul>
+                                            @foreach (var ingredient in payment.SelectedIngredients.Split(','))
+                                            {
+                                                <li>@ingredient</li>
+                                            }
+                                        </ul>
+                                    }
+                                    @if (!string.IsNullOrEmpty(payment.SelectedAdditionalProductsId))
+                                    {
+                                        <h6 class="mt-3">Additional Ingredients:</h6>
+                                        <ul>
+                                            @foreach (var additionalProductId in payment.SelectedAdditionalProductsId.Split(','))
+                                            {
+                                                var selectedProduct = Model.Products.FirstOrDefault(p => p.Id == int.Parse(additionalProductId));
+                                                if (selectedProduct != null)
+                                                {
+                                                    <li>@selectedProduct.Name - R$@selectedProduct.Price</li>
+                                                }
+                                            }
+                                        </ul>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+    </div>
+</div>
+
+            </div>
+        </div>
+    </div>
+</div>

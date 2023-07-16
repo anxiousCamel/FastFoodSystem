@@ -31,6 +31,13 @@ namespace EasyProduct.Controllers
         }
 
         [HttpPost]
+        public IActionResult GetTotalPrice()
+        {
+            double totalCartPrice = _productsCartRepository.CalculateTotalCartPrice();
+            return Json(new { totalPrice = totalCartPrice });
+        }
+
+        [HttpPost]
         public ActionResult GetProductInfo(int Id)
         {
             var productInfo = _productsCartRepository.GetProductInfo(Id);
@@ -59,12 +66,20 @@ namespace EasyProduct.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
+        
         public IActionResult RemoveToCart(int id)
         {
             bool removed = _productsCartRepository.RemoveToCart(id);
             return Json(new { removed = removed });
         }
+
+        
+        public IActionResult RemoveAllToCart()
+        {
+            _productsCartRepository.RemoveAllToCart();
+            return RedirectToAction("Index");
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
