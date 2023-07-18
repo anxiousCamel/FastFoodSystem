@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "aL1vsxLEvfo2rbFCb+ZjSq1yueIVR/zTQpIxFRM0D74=",
+  "Hash": "vgIiBcq5OGg0S5b7xdve2tl4QAEI3rvPzfBfPLjiXBg=",
   "Source": "EasyProduct",
   "BasePath": "_content/EasyProduct",
   "Mode": "Default",
@@ -102,23 +102,6 @@
       "OriginalItemSpec": "wwwroot/js/ChangeImage.js"
     },
     {
-      "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/js/HomeActions.js",
-      "SourceId": "EasyProduct",
-      "SourceType": "Discovered",
-      "ContentRoot": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/",
-      "BasePath": "_content/EasyProduct",
-      "RelativePath": "js/HomeActions.js",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/js/HomeActions.js"
-    },
-    {
       "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/js/HomeIndex.js",
       "SourceId": "EasyProduct",
       "SourceType": "Discovered",
@@ -134,23 +117,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/js/HomeIndex.js"
-    },
-    {
-      "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/js/ShoppingCart.js",
-      "SourceId": "EasyProduct",
-      "SourceType": "Discovered",
-      "ContentRoot": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/",
-      "BasePath": "_content/EasyProduct",
-      "RelativePath": "js/ShoppingCart.js",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/js/ShoppingCart.js"
     },
     {
       "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.css",
