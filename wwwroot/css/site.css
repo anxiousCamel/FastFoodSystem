@@ -36,7 +36,7 @@ a {
 }
 
 .card-block {
-  width: 200px;
+  width: 150px;
   border: 1px solid lightgrey;
   border-radius: 5px !important;
   background-color: #FAFAFA;
@@ -163,7 +163,17 @@ a {
 }
 
 .img-small {
-  width: 50px; /* Defina o tamanho desejado para a imagem */
+  width: 50px;
+  /* Defina o tamanho desejado para a imagem */
   height: 50px;
 }
 
+.spinner-border {
+  display: none;
+  /* Ocultar por padrão */
+}
+
+.show-spinner .spinner-border {
+  display: inline-block;
+  /* Exibir quando necessário */
+}

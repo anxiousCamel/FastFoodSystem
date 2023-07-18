@@ -90,7 +90,7 @@ $('.remove-button').click(function () {
                 // Obter o novo preço total
                 $.ajax({
                     url: '/Home/GetTotalPrice',
-                    type: 'POST',   
+                    type: 'POST',
                     success: function (response) {
                         // Atualizar o preço total
                         $('.totalCartPrice').text(response.totalPrice);
@@ -111,18 +111,157 @@ $(document).ready(function () {
     });
 });
 
+
 $(document).ready(function () {
     $('.payment-option').click(function () {
         var paymentMethod = $(this).data('payment-method');
-    
+
         $('.payment-column').hide(); // Oculta todas as colunas de pagamento
 
         if (paymentMethod === 'pix') {
-            $('#pixColumn').show();
+            $('#pixColumn').show(); processPixPayment();
         } else if (paymentMethod === 'card') {
-            $('#cardColumn').show();
+            $('#cardColumn').show(); processCardPayment();
         } else if (paymentMethod === 'money') {
             $('#moneyColumn').show();
         }
+    });
+});
+
+
+
+
+
+
+
+///FakeSimulation
+
+// Função para exibir o botão "Finish"
+function showFinishButton() {
+    var modalFooter = document.getElementById("modalFooter");
+    modalFooter.style.display = "block";
+}
+// Função para exibir a mensagem de status do Pix atualizada na página
+function showPixStatusMessage(message, isLastMessage) {
+    var pixStatusMessage = document.getElementById("pixStatusMessage");
+    pixStatusMessage.textContent = message;
+    if (isLastMessage) {
+        pixStatusMessage.classList.add("fw-bold", "text-success");
+        showFinishButton(); // Exibir o botão "Finish"
+    }
+}
+
+// Função para exibir a mensagem de status do cartão atualizada na página
+function showCardStatusMessage(message, isLastMessage) {
+    var cardStatusMessages = document.getElementById("cardStatusMessages");
+    var newMessage = document.createElement("p");
+    newMessage.textContent = message;
+    if (isLastMessage) {
+        newMessage.classList.add("fw-bold", "text-success");
+        showFinishButton(); // Exibir o botão "Finish"
+    }
+    cardStatusMessages.innerHTML = ""; // Limpar todas as mensagens existentes
+    cardStatusMessages.appendChild(newMessage);
+}
+
+// Função para simular o processo de pagamento via Pix
+function processPixPayment() {
+    // Exibir a mensagem "Aguardando pagamento..."
+    showPixStatusMessage("Aguardando pagamento...");
+
+    // Exibir o spinner
+    document.getElementById("pixColumn").classList.add("show-spinner");
+
+    // Simular um atraso antes de confirmar o pagamento
+    setTimeout(() => {
+        // Ocultar o spinner
+        document.getElementById("pixColumn").classList.remove("show-spinner");
+
+        // Exibir a mensagem "Pagamento confirmado!"
+        showPixStatusMessage("Pagamento confirmado!", true);
+    }, 2500); // Tempo de espera em milissegundos antes de confirmar o pagamento
+}
+
+// Função para simular o processo de transação do cartão
+function processCardPayment() {
+    // Exibir a mensagem "Aproxime o cartão na maquininha"
+    showCardStatusMessage("Aproxime ou insira o cartão na maquininha...");
+
+    // Exibir o spinner
+    document.getElementById("cardColumn").classList.add("show-spinner");
+
+    // Simular um atraso antes de solicitar a senha
+    setTimeout(() => {
+        // Ocultar o spinner
+        document.getElementById("cardColumn").classList.remove("show-spinner");
+
+        // Exibir a mensagem "Insira a senha"
+        showCardStatusMessage("Insira a senha...");
+
+        // Exibir o spinner novamente
+        document.getElementById("cardColumn").classList.add("show-spinner");
+
+        // Simular um atraso antes de processar a transação
+        setTimeout(() => {
+            // Ocultar o spinner
+            document.getElementById("cardColumn").classList.remove("show-spinner");
+
+            // Exibir a mensagem "Processando..."
+            showCardStatusMessage("Processando...");
+
+            // Exibir o spinner novamente
+            document.getElementById("cardColumn").classList.add("show-spinner");
+
+            // Simular um atraso antes de mostrar a transação aprovada
+            setTimeout(() => {
+                // Ocultar o spinner
+                document.getElementById("cardColumn").classList.remove("show-spinner");
+
+                // Exibir a mensagem "Transação aprovada, retire o cartão..."
+                showCardStatusMessage("Transação aprovada, retire o cartão...", true);
+            }, 1500); // Tempo de espera em milissegundos antes de mostrar a transação aprovada
+        }, 3500); // Tempo de espera em milissegundos antes de processar a transação
+    }, 2000); // Tempo de espera em milissegundos antes de solicitar a senha
+}
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const moneyButtons = document.querySelectorAll('.money-button');
+    const amountPaidElement = document.getElementById('amountPaid');
+    const amountRemainingElement = document.getElementById('amountRemaining');
+    const changeDueElement = document.getElementById('changeDue');
+    let amountPaid = 0;
+    let amountRemaining = parseFloat(document.getElementById('totalCartPrice').getAttribute('data-total-cart-price'));
+    let changeDue = 0;
+
+    moneyButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            const value = parseFloat(button.getAttribute('data-value'));
+            amountPaid += value;
+            amountRemaining = Math.max(amountRemaining - value, 0);
+            changeDue = Math.max(amountPaid - amountRemaining, 0);
+
+            amountPaidElement.textContent = 'Valor pago: R$ ' + amountPaid.toFixed(2);
+            amountRemainingElement.textContent = 'Valor restante: R$ ' + amountRemaining.toFixed(2);
+            changeDueElement.textContent = 'Troco: R$ ' + changeDue.toFixed(2);
+
+            // Atualizar estilos e cores dos valores
+            amountPaidElement.classList.toggle('fw-bold', amountPaid < amountRemaining);
+            amountPaidElement.classList.toggle('text-warning', amountPaid < amountRemaining);
+            amountPaidElement.classList.toggle('text-primary', amountPaid >= amountRemaining);
+
+            amountRemainingElement.classList.toggle('fw-bold', amountRemaining > 0);
+            amountRemainingElement.classList.toggle('text-danger', amountRemaining > 0);
+            amountRemainingElement.classList.toggle('text-secondary', amountRemaining <= 0);
+
+            changeDueElement.classList.toggle('text-secondary', changeDue === 0);
+
+            if (changeDue > 0) {
+                changeDueElement.classList.toggle('fw-bold');
+                changeDueElement.classList.toggle('text-success');
+                showFinishButton();
+            }
+        });
     });
 });

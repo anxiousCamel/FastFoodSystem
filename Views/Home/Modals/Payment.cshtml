@@ -5,13 +5,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="paymentModalLabel">Payment Method</h5>
+
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row m-3 text-center">
+                <div class="row m-2 text-center">
 
-                    <div class="table-responsive col-8">
-                        <div class="radio-group justify-content-between px-3">
+                    <div class="col-8">
+                        <div class="radio-group justify-content-between">
                             <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio payment-option"
                                 data-payment-method="pix">
                                 <div class="flex-row">
@@ -34,7 +35,20 @@
                                                 src="https://cdn-icons-png.flaticon.com/512/6963/6963703.png"
                                                 width="100" height="100">
                                         </div>
-                                        <p>Card</p>
+                                        <p>Credito</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio payment-option"
+                                data-payment-method="card">
+                                <div class="flex-row">
+                                    <div class="col">
+                                        <div class="pic">
+                                            <img class="irc_mut img-fluid"
+                                                src="https://cdn-icons-png.flaticon.com/512/6963/6963703.png"
+                                                width="100" height="100">
+                                        </div>
+                                        <p>Debito</p>
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +69,7 @@
                         <div class="col">
                             @{
                                 var totalCartPrice = 0.0;
-                                <table id="paymentCartTable" class="table table-sm">
+                                <table id="paymentCartTable" class="table table-sm table-responsive ">
                                     <thead>
                                         <tr>
                                             <th>Quantity</th>
@@ -128,6 +142,7 @@
                                         <h5 class="fw-bold">Total:⠀</h5>
                                     </div>
                                     <div class="">
+                                        <div id="totalCartPrice" data-total-cart-price="@totalCartPrice"></div>
                                         <h5 class="totalCartPrice"> @totalCartPrice</h5>
                                     </div>
                                 </div>
@@ -136,19 +151,39 @@
                     </div>
 
                     <div id="pixColumn" class="col payment-column" style="display: none;">
-                        <h4>Coluna para a opção Pix</h4>
-                    </div>
-                    <div id="cardColumn" class="col payment-column" style="display: none;">
-                        <h4>Coluna para a opção Card</h4>
+                        <h4>Pagamento em Pix <span class="text-danger fw-bold">system not implemented only
+                                prototype</span></h4>
+
+                        <div>
+                            <img src="https://www.bookdown.org/pbaumgartner/itns-exercises/img/QR/Chap01/chap01-poll-intuitions-true-false-min.png"
+                                alt="">
+
+                        </div>
+
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div id="pixStatusMessage"></div>
                     </div>
 
+                    <div id="cardColumn" class="col payment-column" style="display: none;">
+                        <h4>Pagamento em Cartão <span class="text-danger fw-bold">system not implemented only
+                                prototype</span></h4>
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div id="cardStatusMessages"></div>
+                    </div>
+
+
                     <div id="moneyColumn" class="col payment-column" style="display: none;">
-                        <h4>Pagamento em Dinheiro</h4>
+                        <h4>Pagamento em Dinheiro <span class="text-danger fw-bold">system not implemented only
+                                prototype</span></h4>
                         <div id="paymentDetails" class="mt-3">
                             <h5>Detalhes do pagamento:</h5>
-                            <p id="amountPaid">Valor pago: R$ 0.00</p>
-                            <p id="amountRemaining">Valor restante: R$ @totalCartPrice</p>
-                            <p id="changeDue">Troco: R$ 0.00</p>
+                            <p id="amountPaid" class="text-warning fw-bold">Valor pago: R$ 0.00</p>
+                            <p id="amountRemaining" class="text-danger fw-bold">Valor restante: R$ @totalCartPrice</p>
+                            <p id="changeDue" class="text-secondary">Troco: R$ 0.00</p>
                         </div>
 
                         <div class="row">
@@ -167,38 +202,15 @@
                                 <button class="money-button btn btn-outline-info m-1" data-value="100">100</button>
                                 <button class="money-button btn btn-outline-info m-1" data-value="200">200</button>
                             </div>
-
                         </div>
                     </div>
 
+
                 </div>
+            </div>
+            <div class="modal-footer" id="modalFooter" style="display: none;">
+                <button type="submit" class="btn btn-success">Finish</button>
             </div>
         </div>
     </div>
 </div>
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const moneyButtons = document.querySelectorAll('.money-button');
-        const amountPaidElement = document.getElementById('amountPaid');
-        const amountRemainingElement = document.getElementById('amountRemaining');
-        const changeDueElement = document.getElementById('changeDue');
-        let amountPaid = 0;
-        let amountRemaining = @totalCartPrice;
-        let changeDue = 0;
-
-        moneyButtons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                const value = parseFloat(button.getAttribute('data-value'));
-                amountPaid += value;
-                amountRemaining = Math.max(amountRemaining - value, 0);
-                changeDue = Math.max(amountPaid - @totalCartPrice, 0);
-
-                amountPaidElement.textContent = 'Valor pago: R$ ' + amountPaid.toFixed(2);
-                amountRemainingElement.textContent = 'Valor restante: R$ ' + amountRemaining.toFixed(2);
-                changeDueElement.textContent = 'Troco: R$ ' + changeDue.toFixed(2);
-            });
-        });
-    });
-</script>
