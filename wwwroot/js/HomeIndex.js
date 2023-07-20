@@ -102,6 +102,19 @@ $('.remove-button').click(function () {
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Select Pay Method
 $(document).ready(function () {
     $('.radio-group .radio').click(function () {
@@ -109,116 +122,97 @@ $(document).ready(function () {
         $('.radio').removeClass('selected');
         $(this).addClass('selected');
     });
-});
 
+    var isPaymentInProgress = false;
+    var currentTimer = null;
 
-$(document).ready(function () {
     $('.payment-option').click(function () {
         var paymentMethod = $(this).data('payment-method');
 
-        $('.payment-column').hide(); // Oculta todas as colunas de pagamento
+        $('.payment-column').hide();
+        $('#payment-info').hide();
+        $('#backButton').show();
 
-        if (paymentMethod === 'pix') {
-            $('#pixColumn').show(); processPixPayment();
-        } else if (paymentMethod === 'card') {
-            $('#cardColumn').show(); processCardPayment();
-        } else if (paymentMethod === 'money') {
-            $('#moneyColumn').show();
+        if (!isPaymentInProgress) {
+            if (currentTimer) {
+                clearTimeout(currentTimer); // Clear the ongoing payment simulation
+            }
+
+            if (paymentMethod === 'pix') {
+                $('#pixColumn').show();
+                processPixPayment();
+            } else if (paymentMethod === 'card') {
+                $('#cardColumn').show();
+                processCardPayment();
+            } else if (paymentMethod === 'money') {
+                $('#moneyColumn').show();
+            }
         }
     });
+
+    $('#backButton').click(function () {
+        isPaymentInProgress = false;
+        $('.payment-column').hide();
+        $('#backButton').hide();
+        $('#payment-info').show();
+        $('.radio').removeClass('selected');
+
+        // Clear the ongoing payment simulation and hide the Finish button
+        if (currentTimer) {
+            clearTimeout(currentTimer);
+        }
+        $('#modalFooter').hide();
+
+        // Reset the status messages
+        $('#pixStatusMessage, #cardStatusMessages').removeClass('fw-bold text-success').text('');
+    });
+
+    function showFinishButton() {
+        $('#Finish').show();
+    }
+
+    function showStatusMessage(element, message, isLastMessage) {
+        isPaymentInProgress = true;
+        element.text(message);
+        if (isLastMessage) {
+            element.addClass('fw-bold text-success');
+            showFinishButton();
+        }
+    }
+
+    function processPixPayment() {
+        var pixStatusMessage = $('#pixStatusMessage');
+        showStatusMessage(pixStatusMessage, 'Aguardando pagamento...');
+        $('#pixColumn').addClass('show-spinner');
+
+        currentTimer = setTimeout(() => {
+            $('#pixColumn').removeClass('show-spinner');
+            showStatusMessage(pixStatusMessage, 'Pagamento confirmado!', true);
+            $('#backButton').hide();
+        }, 2500);
+    }
+
+    function processCardPayment() {
+        var cardStatusMessages = $('#cardStatusMessages');
+        showStatusMessage(cardStatusMessages, 'Aproxime ou insira o cartão na maquininha...');
+
+        $('#cardColumn').addClass('show-spinner');
+        currentTimer = setTimeout(() => {
+            $('#cardColumn').removeClass('show-spinner');
+            showStatusMessage(cardStatusMessages, 'Insira a senha...');
+
+            $('#cardColumn').addClass('show-spinner');
+            currentTimer = setTimeout(() => {
+                $('#cardColumn').removeClass('show-spinner');
+                showStatusMessage(cardStatusMessages, 'Processando...');
+
+                $('#cardColumn').addClass('show-spinner');
+                currentTimer = setTimeout(() => {
+                    $('#cardColumn').removeClass('show-spinner');
+                    showStatusMessage(cardStatusMessages, 'Transação aprovada, retire o cartão...', true);
+                    $('#backButton').hide();
+                }, 1500);
+            }, 3500);
+        }, 2000);
+    }
 });
-
-
-
-
-
-
-
-///FakeSimulation
-// Função para exibir o botão "Finish"
-function showFinishButton() {
-    var modalFooter = document.getElementById("modalFooter");
-    modalFooter.style.display = "block";
-}
-// Função para exibir a mensagem de status do Pix atualizada na página
-function showPixStatusMessage(message, isLastMessage) {
-    var pixStatusMessage = document.getElementById("pixStatusMessage");
-    pixStatusMessage.textContent = message;
-    if (isLastMessage) {
-        pixStatusMessage.classList.add("fw-bold", "text-success");
-        showFinishButton(); // Exibir o botão "Finish"
-    }
-}
-
-// Função para exibir a mensagem de status do cartão atualizada na página
-function showCardStatusMessage(message, isLastMessage) {
-    var cardStatusMessages = document.getElementById("cardStatusMessages");
-    var newMessage = document.createElement("p");
-    newMessage.textContent = message;
-    if (isLastMessage) {
-        newMessage.classList.add("fw-bold", "text-success");
-        showFinishButton(); // Exibir o botão "Finish"
-    }
-    cardStatusMessages.innerHTML = ""; // Limpar todas as mensagens existentes
-    cardStatusMessages.appendChild(newMessage);
-}
-
-// Função para simular o processo de pagamento via Pix
-function processPixPayment() {
-    // Exibir a mensagem "Aguardando pagamento..."
-    showPixStatusMessage("Aguardando pagamento...");
-
-    // Exibir o spinner
-    document.getElementById("pixColumn").classList.add("show-spinner");
-
-    // Simular um atraso antes de confirmar o pagamento
-    setTimeout(() => {
-        // Ocultar o spinner
-        document.getElementById("pixColumn").classList.remove("show-spinner");
-
-        // Exibir a mensagem "Pagamento confirmado!"
-        showPixStatusMessage("Pagamento confirmado!", true);
-    }, 2500); // Tempo de espera em milissegundos antes de confirmar o pagamento
-}
-
-// Função para simular o processo de transação do cartão
-function processCardPayment() {
-    // Exibir a mensagem "Aproxime o cartão na maquininha"
-    showCardStatusMessage("Aproxime ou insira o cartão na maquininha...");
-
-    // Exibir o spinner
-    document.getElementById("cardColumn").classList.add("show-spinner");
-
-    // Simular um atraso antes de solicitar a senha
-    setTimeout(() => {
-        // Ocultar o spinner
-        document.getElementById("cardColumn").classList.remove("show-spinner");
-
-        // Exibir a mensagem "Insira a senha"
-        showCardStatusMessage("Insira a senha...");
-
-        // Exibir o spinner novamente
-        document.getElementById("cardColumn").classList.add("show-spinner");
-
-        // Simular um atraso antes de processar a transação
-        setTimeout(() => {
-            // Ocultar o spinner
-            document.getElementById("cardColumn").classList.remove("show-spinner");
-
-            // Exibir a mensagem "Processando..."
-            showCardStatusMessage("Processando...");
-
-            // Exibir o spinner novamente
-            document.getElementById("cardColumn").classList.add("show-spinner");
-
-            // Simular um atraso antes de mostrar a transação aprovada
-            setTimeout(() => {
-                // Ocultar o spinner
-                document.getElementById("cardColumn").classList.remove("show-spinner");
-
-                // Exibir a mensagem "Transação aprovada, retire o cartão..."
-                showCardStatusMessage("Transação aprovada, retire o cartão...", true);
-            }, 1500); // Tempo de espera em milissegundos antes de mostrar a transação aprovada
-        }, 3500); // Tempo de espera em milissegundos antes de processar a transação
-    }, 2000); // Tempo de espera em milissegundos antes de solicitar a senha
-}
