@@ -1,6 +1,6 @@
 @model EasyProduct.Models.GroupModel
 
-<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true"  data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -26,6 +26,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio payment-option"
                                 data-payment-method="card">
                                 <div class="flex-row">
@@ -39,6 +40,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio payment-option"
                                 data-payment-method="card">
                                 <div class="flex-row">
@@ -52,6 +54,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio payment-option"
                                 data-payment-method="money">
                                 <div class="flex-row">
@@ -66,6 +69,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="col">
                             @{
                                 var totalCartPrice = 0.0;
@@ -101,9 +105,22 @@
                                                                 }
                                                             }
                                                         }
-                                                        var totalPrice = (product.Price + additionalProductsTotalPrice) *
+
+                                                        double totalPrice;
+
+                                                        if (product.DayPromotion == @ViewBag.CurrentDayOfWeek || product.DayPromotion == 8)
+                                                        {
+                                                            totalPrice = (product.PromotionPrice + additionalProductsTotalPrice) *
                                                         payment.Quantity;
+                                                        }
+                                                        else
+                                                        {
+                                                             totalPrice = (product.Price + additionalProductsTotalPrice) *
+                                                        payment.Quantity;
+                                                        }
+
                                                         totalCartPrice += totalPrice;
+                                                        
                                                         <tr id="payment-@payment.Id">
                                                             <td>@payment.Quantity</td>
                                                             <td>@product.Name <img src="@product.ImageURL" alt="" class="img-small">
@@ -220,46 +237,5 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const moneyButtons = document.querySelectorAll('.money-button');
-        const amountPaidElement = document.getElementById('amountPaid');
-        const amountRemainingElement = document.getElementById('amountRemaining');
-        const changeDueElement = document.getElementById('changeDue');
-        let amountPaid = 0;
-        let amountRemaining = @totalCartPrice;
-        let changeDue = 0;
-
-        moneyButtons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                const value = parseFloat(button.getAttribute('data-value'));
-                amountPaid += value;
-                amountRemaining = Math.max(amountRemaining - value, 0);
-                changeDue = Math.max(amountPaid - @totalCartPrice, 0);
-
-                amountPaidElement.textContent = 'Valor pago: R$ ' + amountPaid.toFixed(2);
-                amountRemainingElement.textContent = 'Valor restante: R$ ' + amountRemaining.toFixed(2);
-                changeDueElement.textContent = 'Troco: R$ ' + changeDue.toFixed(2);
-
-                // Atualizar estilos e cores dos valores
-                amountPaidElement.classList.toggle('fw-bold', amountPaid < @totalCartPrice);
-                amountPaidElement.classList.toggle('text-warning', amountPaid < @totalCartPrice);
-                amountPaidElement.classList.toggle('text-primary', amountPaid >= @totalCartPrice);
-
-                amountRemainingElement.classList.toggle('fw-bold', amountRemaining > 0);
-                amountRemainingElement.classList.toggle('text-danger', amountRemaining > 0);
-
-
-                changeDueElement.classList.toggle('text-secondary', changeDue === 0);
-                if (amountRemaining <= 0) {
-                    amountRemainingElement.classList.toggle('text-secondary');
-                    showFinishButton();
-                }
-
-                if (changeDue > 0) {
-                    changeDueElement.classList.toggle('fw-bold');
-                    changeDueElement.classList.toggle('text-success');
-                }
-            });
-        });
-    });
+    const totalCartPrice = @totalCartPrice;
 </script>

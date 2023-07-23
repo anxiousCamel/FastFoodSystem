@@ -84,7 +84,7 @@ $('.remove-button').click(function () {
             if (result.removed) {
                 $('#cartItem-' + itemId).next('tr').remove();
                 $('#cartItem-' + itemId).remove();
-                $('#payment-' + itemId).next('tr').remove();
+                
                 $('#payment-' + itemId).remove();
 
                 // Obter o novo preço total
@@ -169,6 +169,7 @@ $(document).ready(function () {
 
     function showFinishButton() {
         $('#Finish').show();
+        $('#backButton').hide();
     }
 
     function showStatusMessage(element, message, isLastMessage) {
@@ -215,4 +216,46 @@ $(document).ready(function () {
             }, 3500);
         }, 2000);
     }
+
+    const moneyButtons = document.querySelectorAll('.money-button');
+    const amountPaidElement = document.getElementById('amountPaid');
+    const amountRemainingElement = document.getElementById('amountRemaining');
+    const changeDueElement = document.getElementById('changeDue');
+    let amountPaid = 0;
+    let amountRemaining = totalCartPrice;
+    let changeDue = 0;
+
+    moneyButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            const value = parseFloat(button.getAttribute('data-value'));
+            amountPaid += value;
+            amountRemaining = Math.max(amountRemaining - value, 0);
+            changeDue = Math.max(amountPaid - totalCartPrice, 0);
+
+            amountPaidElement.textContent = 'Valor pago: R$ ' + amountPaid.toFixed(2);
+            amountRemainingElement.textContent = 'Valor restante: R$ ' + amountRemaining.toFixed(2);
+            changeDueElement.textContent = 'Troco: R$ ' + changeDue.toFixed(2);
+
+            // Atualizar estilos e cores dos valores
+            amountPaidElement.classList.toggle('fw-bold', amountPaid < totalCartPrice);
+            amountPaidElement.classList.toggle('text-warning', amountPaid < totalCartPrice);
+            amountPaidElement.classList.toggle('text-primary', amountPaid >= totalCartPrice);
+
+            amountRemainingElement.classList.toggle('fw-bold', amountRemaining > 0);
+            amountRemainingElement.classList.toggle('text-danger', amountRemaining > 0);
+
+
+            changeDueElement.classList.toggle('text-secondary', changeDue === 0);
+            if (amountRemaining <= 0) {
+                amountRemainingElement.classList.toggle('text-secondary');
+                showFinishButton();
+            }
+
+            if (changeDue > 0) {
+                changeDueElement.classList.toggle('fw-bold');
+                changeDueElement.classList.toggle('text-success');
+            }
+        });
+    });
+
 });

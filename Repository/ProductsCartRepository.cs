@@ -145,7 +145,18 @@ namespace EasyProduct.Repository
                             }
                         }
                     }
-                    var totalPrice = (product.Price + additionalProductsTotalPrice) * cartItem.Quantity;
+
+                    double totalPrice;
+                    if (product.DayPromotion == (int)DateTime.Now.DayOfWeek || product.DayPromotion == 8)
+                    {
+                        totalPrice = (product.PromotionPrice + additionalProductsTotalPrice) * cartItem.Quantity;
+                    }
+
+                    else
+                    {
+                        totalPrice = (product.Price + additionalProductsTotalPrice) * cartItem.Quantity;
+                    }
+                    
                     totalCartPrice += totalPrice;
                 }
             }

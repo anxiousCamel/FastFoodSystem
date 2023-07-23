@@ -44,8 +44,19 @@
                                         }
                                     }
                                 }
-                                
-                                var totalPrice = (product.Price + additionalProductsTotalPrice) * cartItem.Quantity;
+
+                                double totalPrice;
+
+                                if (product.DayPromotion == @ViewBag.CurrentDayOfWeek || product.DayPromotion == 8)
+                                {
+                                    totalPrice = (product.PromotionPrice + additionalProductsTotalPrice) * cartItem.Quantity;
+                                }
+
+                                else
+                                {
+                                    totalPrice = (product.Price + additionalProductsTotalPrice) * cartItem.Quantity;
+                                }
+
                                 totalCartPrice += totalPrice;
 
                                 <tr id="cartItem-@cartItem.Id">

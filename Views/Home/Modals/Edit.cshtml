@@ -12,7 +12,8 @@
             if (product != null)
             {
                 <div class="modal fade" id="editProductModal_@cartItem.Id" tabindex="-1"
-                    aria-labelledby="editProductModalLabel_@cartItem.Id" aria-hidden="true">
+                    aria-labelledby="editProductModalLabel_@cartItem.Id" aria-hidden="true" data-bs-backdrop="static"
+                    data-bs-keyboard="false">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -29,7 +30,7 @@
                                     </div>
                                 </div>
                                 <form asp-controller="Home" asp-action="Edit" method="post">
-                                    
+
                                     <!-- Id -->
                                     <input type="hidden" name="Id" value="@cartItem.Id" />
 
@@ -80,8 +81,19 @@
                                             id="increaseQuantity"><i class="bi bi-caret-up"></i></button>
                                     </div>
                                     <div class="text-end d-flex justify-content-end">
+                                        @if (product.DayPromotion == @ViewBag.CurrentDayOfWeek || product.DayPromotion == 8)
+                                        {
+                                        <h5>Price: $<span class="total-price" data-price-element
+                                                data-price="@product.PromotionPrice">@product.PromotionPrice</span></h5>
+                                        }
+
+                                        else
+
+                                        {
                                         <h5>Price: $<span class="total-price" data-price-element
                                                 data-price="@product.Price">@product.Price</span></h5>
+                                        }
+                                        
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

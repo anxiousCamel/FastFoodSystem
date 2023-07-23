@@ -51,16 +51,24 @@
                         {
                             <div class="col">
                                 <div class="card" data-bs-toggle="modal" data-bs-target="#productModal_@product.Id">
-                                    <div class="badge">Hot </div>
-
+                                    @if (product.DayPromotion == @ViewBag.CurrentDayOfWeek || product.DayPromotion == 8)
+                                    {
+                                        <div class="badge">Promotion</div>
+                                    }
                                     <div class="card-img-container">
                                         <img src="@product.ImageURL" class="card-img" alt="...">
-                                    </div>  
-
+                                    </div>
                                     <div class="product-details">
                                         <h6 class="card-title text">@product.Name</h6>
                                         <div class="product-bottom-details">
-                                            <div class="product-price"><small>$96.00</small>$@product.Price</div>
+                                            @if (product.DayPromotion == @ViewBag.CurrentDayOfWeek || product.DayPromotion == 8)
+                                            {
+                                                <div class="product-price"><small>$@product.Price</small>$@product.PromotionPrice</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="product-price">$@product.Price</div>
+                                            }
                                         </div>
                                     </div>
                                 </div>
