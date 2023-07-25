@@ -16,16 +16,31 @@ namespace EasyProduct.Controllers
             _productsCartRepository = productsCartRepository;
         }
 
+
         public IActionResult Index()
         {
+            // Obter todos os produtos
             List<ProductsModel> products = _productsRepository.SearcheAll();
+
+            // Obter todos os itens do carrinho
             List<ProductCartModel> cartItems = _productsCartRepository.GetCartItems();
+
+            // Encontrar os combos no carrinho (não precisa atribuir a uma variável)
+            _productsCartRepository.FindCombosInCart();
+
+            // Definir a propriedade ComboItem em cada item do carrinho (cartItem)
+            foreach (var cartItem in cartItems)
+            {
+                cartItem.ComboItem = cartItem.ComboItem; // Não é necessário, mas mantido para referência
+            }
 
             var viewModel = new GroupModel
             {
                 Products = products,
                 Cart = cartItems
             };
+
+            // Não é necessário adicionar comboItems à ViewBag, pois o método já atualizou os ComboItems nos cartItems
 
             return View(viewModel);
         }
@@ -66,14 +81,14 @@ namespace EasyProduct.Controllers
             return RedirectToAction("Index");
         }
 
-        
+
         public IActionResult RemoveToCart(int id)
         {
             bool removed = _productsCartRepository.RemoveToCart(id);
             return Json(new { removed = removed });
         }
 
-        
+
         public IActionResult RemoveAllToCart()
         {
             _productsCartRepository.RemoveAllToCart();

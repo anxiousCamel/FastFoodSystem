@@ -40,16 +40,49 @@
                                     }
                                     <div class="mt-3">
                                         <p>Additional Products:</p>
-                                        @foreach (var additionalProduct in Model.Products.Where(p => p.Type == 6))
+                                        @if(product.Type == 1)
                                         {
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input additional-product-checkbox" type="checkbox"
-                                                    id="additionalProduct_@additionalProduct.Id"
-                                                    name="model.SelectedAdditionalProductsId" value="@additionalProduct.Id"
-                                                    data-price="@additionalProduct.Price">
-                                                <label class="form-check-label"
-                                                    for="additionalProduct_@additionalProduct.Id">@additionalProduct.Name</label>
-                                            </div>
+                                            @foreach (var additionalProduct in Model.Products.Where(p => p.Type == 6))
+                                            {
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input additional-product-checkbox" type="checkbox"
+                                                        id="additionalProduct_@additionalProduct.Id"
+                                                        name="model.SelectedAdditionalProductsId" value="@additionalProduct.Id"
+                                                        data-price="@additionalProduct.Price">
+                                                    <label class="form-check-label"
+                                                        for="additionalProduct_@additionalProduct.Id">@additionalProduct.Name</label>
+                                                </div>
+                                            }
+                                        }
+
+                                        else if(product.Type == 3)
+                                        {
+                                            @foreach (var additionalProduct in Model.Products.Where(p => p.Type == 8))
+                                            {
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input additional-product-checkbox" type="checkbox"
+                                                        id="additionalProduct_@additionalProduct.Id"
+                                                        name="model.SelectedAdditionalProductsId" value="@additionalProduct.Id"
+                                                        data-price="@additionalProduct.Price">
+                                                    <label class="form-check-label"
+                                                        for="additionalProduct_@additionalProduct.Id">@additionalProduct.Name</label>
+                                                </div>
+                                            }
+                                        }
+
+                                        else if(product.Type == 4)
+                                        {
+                                            @foreach (var additionalProduct in Model.Products.Where(p => p.Type == 7))
+                                            {
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input additional-product-checkbox" type="checkbox"
+                                                        id="additionalProduct_@additionalProduct.Id"
+                                                        name="model.SelectedAdditionalProductsId" value="@additionalProduct.Id"
+                                                        data-price="@additionalProduct.Price">
+                                                    <label class="form-check-label"
+                                                        for="additionalProduct_@additionalProduct.Id">@additionalProduct.Name</label>
+                                                </div>
+                                            }
                                         }
                                     </div>
                                     <div class="input-group mt-3">

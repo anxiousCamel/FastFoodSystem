@@ -108,7 +108,7 @@
 
                                                         double totalPrice;
 
-                                                        if (product.DayPromotion == @ViewBag.CurrentDayOfWeek || product.DayPromotion == 8)
+                                                        if (payment.ComboItem || product.DayPromotion == @ViewBag.CurrentDayOfWeek || product.DayPromotion == 8)
                                                         {
                                                             totalPrice = (product.PromotionPrice + additionalProductsTotalPrice) *
                                                         payment.Quantity;

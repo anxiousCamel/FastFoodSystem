@@ -6,6 +6,7 @@ using EasyProduct.Models;
 using EasyProduct.Repository.Interface;
 using EasyProduct.Data;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 
 namespace EasyProduct.Repository
 {
@@ -156,11 +157,50 @@ namespace EasyProduct.Repository
                     {
                         totalPrice = (product.Price + additionalProductsTotalPrice) * cartItem.Quantity;
                     }
-                    
+
                     totalCartPrice += totalPrice;
                 }
             }
             return totalCartPrice;
+        }
+
+        public void FindCombosInCart()
+        {
+            var cartItems = GetCartItems();
+
+            // Filtrar os produtos por tipo
+            var type1Products = cartItems.Where(c => _productsRepository.SearcheForId(c.ProductId).Type == 1).ToList();
+            var type2Products = cartItems.Where(c => _productsRepository.SearcheForId(c.ProductId).Type == 2).ToList();
+            var type3Products = cartItems.Where(c => _productsRepository.SearcheForId(c.ProductId).Type == 3).ToList();
+
+            // Encontrar os combos válidos
+            var validCombos = new List<List<int>>();
+
+            foreach (var type1Product in type1Products)
+            {
+                foreach (var type2Product in type2Products)
+                {
+                    foreach (var type3Product in type3Products)
+                    {
+                        if (!type1Product.ComboItem && !type2Product.ComboItem && !type3Product.ComboItem)
+                        {
+                            validCombos.Add(new List<int> { type1Product.ProductId, type2Product.ProductId, type3Product.ProductId });
+                            type1Product.ComboItem = true;
+                            type2Product.ComboItem = true;
+                            type3Product.ComboItem = true;
+                        }
+                    }
+                }
+            }
+
+            // Definir o indicador de grupo como false para os produtos restantes no carrinho
+            foreach (var cartItem in cartItems)
+            {
+                if (!cartItem.ComboItem)
+                {
+                    cartItem.ComboItem = false;
+                }
+            }
         }
     }
 }

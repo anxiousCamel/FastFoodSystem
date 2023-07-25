@@ -13,5 +13,6 @@ namespace EasyProduct.Models
         public string? SelectedIngredients { get; set; }
         public string? SelectedAdditionalProductsId { get; set; }
         public int Quantity { get; set; }
+        public bool ComboItem { get; set; }
     }
 }

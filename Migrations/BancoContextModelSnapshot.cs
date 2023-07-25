@@ -29,6 +29,9 @@ namespace EasyProduct.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<bool>("ComboItem")
+                        .HasColumnType("bit");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
@@ -36,11 +39,9 @@ namespace EasyProduct.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("SelectedAdditionalProductsId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SelectedIngredients")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

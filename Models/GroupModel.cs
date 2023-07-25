@@ -9,6 +9,5 @@ namespace EasyProduct.Models
     {
         public List<ProductsModel> Products { get; set; } = null!;
         public List<ProductCartModel> Cart { get; set; } = null!;
-
     }
 }

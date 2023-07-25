@@ -23,57 +23,61 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model != null && Model.Cart != null && Model.Cart.Any())
-                    {
-                        @foreach (var cartItem in Model.Cart)
-                        {
-                            var product = Model.Products.FirstOrDefault(p => p.Id == cartItem.ProductId);
-                            if (product != null)
-                            {
-                                var additionalProductsTotalPrice = 0.0;
-                                if (!string.IsNullOrEmpty(cartItem.SelectedAdditionalProductsId))
-                                {
-                                    var additionalProductIds = cartItem.SelectedAdditionalProductsId.Split(',');
+                @if (Model != null && Model.Cart != null && Model.Cart.Any())
+                {
+                    @foreach (var cartItem in Model.Cart)
+{
+    var product = Model.Products.FirstOrDefault(p => p.Id == cartItem.ProductId);
+    if (product != null)
+    {
+        var additionalProductsTotalPrice = 0.0;
 
-                                    foreach (var additionalProductId in additionalProductIds)
-                                    {
-                                        var selectedProduct = Model.Products.FirstOrDefault(p => p.Id == int.Parse(additionalProductId));
-                                        if (selectedProduct != null)
-                                        {
-                                            additionalProductsTotalPrice += selectedProduct.Price;
-                                        }
-                                    }
-                                }
+        if (!string.IsNullOrEmpty(cartItem.SelectedAdditionalProductsId))
+        {
+            var additionalProductIds = cartItem.SelectedAdditionalProductsId.Split(',');
 
-                                double totalPrice;
+            foreach (var additionalProductId in additionalProductIds)
+            {
+                var selectedProduct = Model.Products.FirstOrDefault(p => p.Id == int.Parse(additionalProductId));
+                if (selectedProduct != null)
+                {
+                    additionalProductsTotalPrice += selectedProduct.Price;
+                }
+            }
+        }
 
-                                if (product.DayPromotion == @ViewBag.CurrentDayOfWeek || product.DayPromotion == 8)
-                                {
-                                    totalPrice = (product.PromotionPrice + additionalProductsTotalPrice) * cartItem.Quantity;
-                                }
+        double totalPrice;
 
-                                else
-                                {
-                                    totalPrice = (product.Price + additionalProductsTotalPrice) * cartItem.Quantity;
-                                }
+        // Verifica se o produto faz parte de um combo (checando o cartItem.ComboItem diretamente)
+        if (cartItem.ComboItem || product.DayPromotion == @ViewBag.CurrentDayOfWeek || product.DayPromotion == 8)
+        {
+            totalPrice = (product.PromotionPrice + additionalProductsTotalPrice) * cartItem.Quantity;
+        }
+        else
+        {
+            totalPrice = (product.Price + additionalProductsTotalPrice) * cartItem.Quantity;
+        }
 
-                                totalCartPrice += totalPrice;
+        // Adicione essas linhas para registrar os detalhes do produto
+        Console.WriteLine($"Product: Id={cartItem.Id}, Type={product.Type}, Name={product.Name}, ComboItem={cartItem.ComboItem}, DayPromotion={product.DayPromotion}");
 
-                                <tr id="cartItem-@cartItem.Id">
-                                    <td data-bs-toggle="collapse" href="#collapse-@cartItem.Id" role="button" aria-expanded="false"
-                                        aria-controls="collapse-@cartItem.Id">@cartItem.Quantity</td>
-                                    <td data-bs-toggle="collapse" href="#collapse-@cartItem.Id" role="button" aria-expanded="false"
-                                        aria-controls="collapse-@cartItem.Id">@product.Name</td>
-                                    <td data-bs-toggle="collapse" href="#collapse-@cartItem.Id" role="button" aria-expanded="false"
-                                        aria-controls="collapse-@cartItem.Id">@totalPrice</td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm remove-button" data-id="@cartItem.Id"><i
-                                                class="bi bi-bag-x-fill"></i></button>
-                                        <button type="button" class="btn btn-warning btn-sm edit-button" data-bs-toggle="modal"
-                                            data-bs-target="#editProductModal_@cartItem.Id" data-id="@cartItem.Id"><i
-                                                class="bi bi-pencil-square"></i></button>
-                                    </td>
-                                </tr>
+        totalCartPrice += totalPrice;
+
+                            <tr id="cartItem-@cartItem.Id">
+                                <td data-bs-toggle="collapse" href="#collapse-@cartItem.Id" role="button" aria-expanded="false"
+                                    aria-controls="collapse-@cartItem.Id">@cartItem.Quantity</td>
+                                <td data-bs-toggle="collapse" href="#collapse-@cartItem.Id" role="button" aria-expanded="false"
+                                    aria-controls="collapse-@cartItem.Id">@product.Name</td>
+                                <td data-bs-toggle="collapse" href="#collapse-@cartItem.Id" role="button" aria-expanded="false"
+                                    aria-controls="collapse-@cartItem.Id">@totalPrice</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm remove-button" data-id="@cartItem.Id"><i
+                                            class="bi bi-bag-x-fill"></i></button>
+                                    <button type="button" class="btn btn-warning btn-sm edit-button" data-bs-toggle="modal"
+                                        data-bs-target="#editProductModal_@cartItem.Id" data-id="@cartItem.Id"><i
+                                            class="bi bi-pencil-square"></i></button>
+                                </td>
+                            </tr>
                                 <tr>
                                     <td colspan="4" class="p-0">
                                         <div class="p-3 collapse" id="collapse-@cartItem.Id">

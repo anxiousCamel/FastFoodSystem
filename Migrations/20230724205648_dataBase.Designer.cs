@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyProduct.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20230702041505_database")]
-    partial class database
+    [Migration("20230724205648_dataBase")]
+    partial class dataBase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,6 +31,9 @@ namespace EasyProduct.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<bool>("ComboItem")
+                        .HasColumnType("bit");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
@@ -38,11 +41,9 @@ namespace EasyProduct.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("SelectedAdditionalProductsId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SelectedIngredients")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

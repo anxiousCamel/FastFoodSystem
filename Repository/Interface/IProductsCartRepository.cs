@@ -16,5 +16,6 @@ namespace EasyProduct.Repository.Interface
         ProductCartModel EditProduct(ProductCartModel product);
         bool RemoveToCart(int Id);
         bool RemoveAllToCart();
+        void FindCombosInCart();
     }
 }
