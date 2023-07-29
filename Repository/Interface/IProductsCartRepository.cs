@@ -10,7 +10,6 @@ namespace EasyProduct.Repository.Interface
     {
         List<ProductCartModel> GetCartItems();
         ProductCartModel SearcheForId (int id);
-        ProductCartModel GetProductInfo(int productId);
         double CalculateTotalCartPrice();
         ProductCartModel AddToCart(ProductCartModel cartItem);
         ProductCartModel EditProduct(ProductCartModel product);

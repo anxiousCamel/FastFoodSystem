@@ -7,7 +7,7 @@
 @{
     var totalCartPrice = 0.0;
     <div class="offcanvas offcanvas-start" data-bs-backdrop="false" tabindex="-1" id="staticBackdrop"
-        aria-labelledby="staticBackdropLabel">
+    aria-labelledby="staticBackdropLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="staticBackdropLabel">Shopping Cart</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -70,13 +70,18 @@
                                     aria-controls="collapse-@cartItem.Id">@product.Name</td>
                                 <td data-bs-toggle="collapse" href="#collapse-@cartItem.Id" role="button" aria-expanded="false"
                                     aria-controls="collapse-@cartItem.Id">@totalPrice</td>
+                                <form asp-controller="Home" asp-action="Remove" method="post">
                                 <td>
-                                    <button type="button" class="btn btn-danger btn-sm remove-button" data-id="@cartItem.Id"><i
-                                            class="bi bi-bag-x-fill"></i></button>
+                                    <input type="hidden" name="id" value="@cartItem.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm remove-button">
+                                        <i class="bi bi-bag-x-fill"></i>
+                                    </button>
+
                                     <button type="button" class="btn btn-warning btn-sm edit-button" data-bs-toggle="modal"
                                         data-bs-target="#editProductModal_@cartItem.Id" data-id="@cartItem.Id"><i
                                             class="bi bi-pencil-square"></i></button>
                                 </td>
+                                </form>
                             </tr>
                                 <tr>
                                     <td colspan="4" class="p-0">

@@ -27,26 +27,6 @@ namespace EasyProduct.Repository
             return _BancoContext.ProductCarts.FirstOrDefault(x => x.Id == id) ?? new ProductCartModel();
         }
 
-        public ProductCartModel GetProductInfo(int productId)
-        {
-            var productCart = SearcheForId(productId);
-
-            // Verificar se o produto foi encontrado
-            if (productCart == null)
-            {
-                throw new Exception("There was an error to edit, this product does not exist");
-            }
-
-            // Mapear as informações do produto para o modelo ProductCartModel
-            var productInfo = new ProductCartModel
-            {
-                ProductId = productCart.ProductId,
-                SelectedAdditionalProductsId = productCart.SelectedAdditionalProductsId,
-                SelectedIngredients = productCart.SelectedIngredients
-            };
-
-            return productInfo;
-        }
 
 
         public ProductCartModel AddToCart(ProductCartModel cartItem)

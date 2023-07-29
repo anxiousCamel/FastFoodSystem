@@ -177,3 +177,18 @@ a {
   display: inline-block;
   /* Exibir quando necessário */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+.no-transition .offcanvas {
+  transition: none !important;
+}

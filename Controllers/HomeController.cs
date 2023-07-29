@@ -52,12 +52,6 @@ namespace EasyProduct.Controllers
             return Json(new { totalPrice = totalCartPrice });
         }
 
-        [HttpPost]
-        public ActionResult GetProductInfo(int Id)
-        {
-            var productInfo = _productsCartRepository.GetProductInfo(Id);
-            return Json(new { success = true, product = productInfo });
-        }
 
         [HttpPost]
         public IActionResult AddToCart(ProductCartModel model)
@@ -82,10 +76,10 @@ namespace EasyProduct.Controllers
         }
 
 
-        public IActionResult RemoveToCart(int id)
+        public IActionResult Remove(int id)
         {
-            bool removed = _productsCartRepository.RemoveToCart(id);
-            return Json(new { removed = removed });
+            bool removido = _productsCartRepository.RemoveToCart(id);
+            return RedirectToAction("Index");
         }
 
 

@@ -74,39 +74,6 @@ $(document).ready(function () {
     });
 });
 
-$('.remove-button').click(function () {
-    var itemId = $(this).data('id');
-    $.ajax({
-        url: '/Home/RemoveToCart',
-        type: 'POST',
-        data: { id: itemId },
-        success: function (result) {
-            if (result.removed) {
-                $('#cartItem-' + itemId).next('tr').remove();
-                $('#cartItem-' + itemId).remove();
-                
-                $('#payment-' + itemId).remove();
-
-                // Obter o novo preço total
-                $.ajax({
-                    url: '/Home/GetTotalPrice',
-                    type: 'POST',
-                    success: function (response) {
-                        // Atualizar o preço total
-                        $('.totalCartPrice').text(response.totalPrice);
-                    }
-                });
-            }
-        }
-    });
-});
-
-
-
-
-
-
-
 
 
 
@@ -258,4 +225,62 @@ $(document).ready(function () {
         });
     });
 
+});
+
+
+
+
+
+
+
+
+// Verifica se o estado do off-canvas está armazenado no localStorage
+const isOffCanvasOpen = localStorage.getItem('offCanvasOpen') === 'true';
+
+// Função para atualizar o estado do off-canvas no localStorage
+function atualizarEstadoOffCanvas(estahAberto) {
+    localStorage.setItem('offCanvasOpen', estahAberto ? 'true' : 'false');
+}
+
+// Função para lidar com a alternância do off-canvas
+function alternarOffCanvas() {
+    const offCanvas = document.querySelector('.offcanvas');
+    if (offCanvas) {
+        const estahAbertoAtualmente = offCanvas.classList.contains('show');
+        if (estahAbertoAtualmente) {
+            offCanvas.classList.remove('show');
+        } else {
+            offCanvas.classList.add('show');
+        }
+        atualizarEstadoOffCanvas(!estahAbertoAtualmente);
+    }
+}
+
+// Verifica o estado ao carregar a página e abre/fecha o off-canvas conforme necessário
+window.addEventListener('DOMContentLoaded', () => {
+    const estadoOffCanvas = localStorage.getItem('offCanvasOpen');
+    if (estadoOffCanvas === 'true') {
+        // Adiciona uma classe especial para desativar temporariamente a animação ao abrir o off-canvas
+        document.body.classList.add('no-transition');
+        alternarOffCanvas();
+        // Aguarde um pequeno intervalo para garantir que o off-canvas esteja aberto antes de remover a classe
+        setTimeout(() => {
+            document.body.classList.remove('no-transition');
+        }, 10);
+    }
+});
+
+// Adicione um ouvinte de eventos para o botão de fechar o off-canvas
+const botaoFechar = document.querySelector('.btn-close');
+if (botaoFechar) {
+    botaoFechar.addEventListener('click', () => {
+        alternarOffCanvas();
+    });
+}
+
+// Salvar o estado do off-canvas antes de recarregar a página
+window.addEventListener('beforeunload', () => {
+    const offCanvas = document.querySelector('.offcanvas');
+    const estahAbertoAtualmente = offCanvas.classList.contains('show');
+    atualizarEstadoOffCanvas(estahAbertoAtualmente);
 });
