@@ -11,6 +11,7 @@ namespace EasyProduct.Repository.Interface
         List<ProductCartModel> GetCartItems();
         ProductCartModel SearcheForId (int id);
         double CalculateTotalCartPrice();
+        PaymentModel AddPayment(PaymentModel products);
         ProductCartModel AddToCart(ProductCartModel cartItem);
         ProductCartModel EditProduct(ProductCartModel product);
         bool RemoveToCart(int Id);

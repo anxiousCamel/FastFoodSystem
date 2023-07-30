@@ -27,6 +27,14 @@ namespace EasyProduct.Repository
             return _BancoContext.ProductCarts.FirstOrDefault(x => x.Id == id) ?? new ProductCartModel();
         }
 
+        public PaymentModel AddPayment(PaymentModel product)
+        {
+            _BancoContext.PaymentInfo.Add(product);
+            _BancoContext.SaveChanges();
+
+            return product;
+        }
+
 
 
         public ProductCartModel AddToCart(ProductCartModel cartItem)

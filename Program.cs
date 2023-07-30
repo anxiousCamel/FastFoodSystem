@@ -11,6 +11,7 @@ builder.Services.AddEntityFrameworkSqlServer().AddDbContext<BancoContext>(option
     options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase")));
 
 // Adicionar injecao de dependencia
+builder.Services.AddScoped<IScreensRepository, ScreensRepository>();
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 builder.Services.AddScoped<IProductsCartRepository, ProductsCartRepository>();
 

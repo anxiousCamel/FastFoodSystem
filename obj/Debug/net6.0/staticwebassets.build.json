@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "vgIiBcq5OGg0S5b7xdve2tl4QAEI3rvPzfBfPLjiXBg=",
+  "Hash": "IZwKsPRmWZHbPCw8Yj++uRebw0YsqMD1JnOXEeLVNOc=",
   "Source": "EasyProduct",
   "BasePath": "_content/EasyProduct",
   "Mode": "Default",
@@ -117,6 +117,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/js/HomeIndex.js"
+    },
+    {
+      "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/js/ScreensIndex.js",
+      "SourceId": "EasyProduct",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/",
+      "BasePath": "_content/EasyProduct",
+      "RelativePath": "js/ScreensIndex.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/js/ScreensIndex.js"
     },
     {
       "Identity": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.css",

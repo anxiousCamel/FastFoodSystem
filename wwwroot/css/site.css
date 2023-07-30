@@ -192,3 +192,15 @@ a {
 .no-transition .offcanvas {
   transition: none !important;
 }
+
+
+
+
+
+
+
+
+.card.isConditionKitchen5 {
+  opacity: 0.5;
+  pointer-events: none;
+}

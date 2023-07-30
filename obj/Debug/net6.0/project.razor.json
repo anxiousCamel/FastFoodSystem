@@ -18409,6 +18409,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/Views/Screens/Index.cshtml",
+      "TargetPath": "Views\\Screens\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/Views/Manager/Index.cshtml",
       "TargetPath": "Views\\Manager\\Index.cshtml",
       "FileKind": "mvc"

@@ -14,7 +14,9 @@ namespace EasyProduct.Models
         public String Name { get; set; } = null!;
         public double Price { get; set; }
         public DateTime DateTime { get; set; }
-        public int ConditionPayment { get; set; }
+        public string? ConditionPayment { get; set; }
         public int ConditionKitchen { get; set; }
+        public TimeSpan PreparationTime { get; set; }
+        public int Type { get; set; }
     }
 }

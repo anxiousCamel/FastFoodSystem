@@ -16,5 +16,6 @@ namespace EasyProduct.Data
 
         public DbSet <ProductsModel> Products { get; set; }
         public DbSet<ProductCartModel> ProductCarts { get; set; }
+        public DbSet<PaymentModel> PaymentInfo { get; set; }
     }
 }

@@ -1,241 +1,271 @@
 @model EasyProduct.Models.GroupModel
-
-<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true"  data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="paymentModalLabel">Payment Method</h5>
-
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row m-2 text-center">
-
-                    <div class="col-auto" id="payment-info">
-                        <div class="radio-group justify-content-between">
-                            <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio payment-option"
-                                data-payment-method="pix">
-                                <div class="flex-row">
-                                    <div class="col">
-                                        <div class="pic">
-                                            <img class="irc_mut img-fluid"
-                                                src="https://devtools.com.br/img/pix/logo-pix-png-icone-520x520.png"
-                                                width="100" height="100">
-                                        </div>
-                                        <p>Pix</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio payment-option"
-                                data-payment-method="card">
-                                <div class="flex-row">
-                                    <div class="col">
-                                        <div class="pic">
-                                            <img class="irc_mut img-fluid"
-                                                src="https://cdn-icons-png.flaticon.com/512/6963/6963703.png"
-                                                width="100" height="100">
-                                        </div>
-                                        <p>Credito</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio payment-option"
-                                data-payment-method="card">
-                                <div class="flex-row">
-                                    <div class="col">
-                                        <div class="pic">
-                                            <img class="irc_mut img-fluid"
-                                                src="https://cdn-icons-png.flaticon.com/512/6963/6963703.png"
-                                                width="100" height="100">
-                                        </div>
-                                        <p>Debito</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio payment-option"
-                                data-payment-method="money">
-                                <div class="flex-row">
-                                    <div class="col">
-                                        <div class="pic">
-                                            <img class="irc_mut img-fluid"
-                                                src="https://cdn-icons-png.flaticon.com/512/925/925014.png" width="100"
-                                                height="100">
-                                        </div>
-                                        <p>Money</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col">
-                            @{
-                                var totalCartPrice = 0.0;
-                                <div class=" table-responsive ">
-                                    <table id="paymentCartTable" class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>Quantity</th>
-                                                <th>Product</th>
-                                                <th>Ingredients</th>
-                                                <th>Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (Model != null && Model.Cart != null && Model.Cart.Any())
-                                            {
-                                                @foreach (var payment in Model.Cart)
-                                                {
-                                                    var product = Model.Products.FirstOrDefault(p => p.Id == payment.ProductId);
-                                                    if (product != null)
-                                                    {
-                                                        var additionalProductsTotalPrice = 0.0;
-                                                        if (!string.IsNullOrEmpty(payment.SelectedAdditionalProductsId))
-                                                        {
-                                                            var additionalProductIds = payment.SelectedAdditionalProductsId.Split(',');
-                                                            foreach (var additionalProductId in additionalProductIds)
-                                                            {
-                                                                var selectedProduct = Model.Products.FirstOrDefault(p => p.Id ==
-                                                                int.Parse(additionalProductId));
-                                                                if (selectedProduct != null)
-                                                                {
-                                                                    additionalProductsTotalPrice += selectedProduct.Price;
-                                                                }
-                                                            }
-                                                        }
-
-                                                        double totalPrice;
-
-                                                        if (payment.ComboItem || product.DayPromotion == @ViewBag.CurrentDayOfWeek || product.DayPromotion == 8)
-                                                        {
-                                                            totalPrice = (product.PromotionPrice + additionalProductsTotalPrice) *
-                                                        payment.Quantity;
-                                                        }
-                                                        else
-                                                        {
-                                                             totalPrice = (product.Price + additionalProductsTotalPrice) *
-                                                        payment.Quantity;
-                                                        }
-
-                                                        totalCartPrice += totalPrice;
-                                                        
-                                                        <tr id="payment-@payment.Id">
-                                                            <td>@payment.Quantity</td>
-                                                            <td>@product.Name <img src="@product.ImageURL" alt="" class="img-small">
-                                                            </td>
-                                                            @if (!string.IsNullOrEmpty(payment.SelectedAdditionalProductsId))
-                                                            {
-                                                                var additionalProductIds = payment.SelectedAdditionalProductsId.Split(',');
-                                                                var selectedIngredients = new List<string>();
-                                                                foreach (var additionalProductId in additionalProductIds)
-                                                                {
-                                                                    var selectedProduct = Model.Products.FirstOrDefault(p => p.Id ==
-                                                                    int.Parse(additionalProductId));
-                                                                    if (selectedProduct != null)
-                                                                    {
-                                                                        selectedIngredients.Add(selectedProduct.Name);
-                                                                    }
-                                                                }
-                                                                var ingredientsString = string.Join(", ", selectedIngredients);
-                                                                <td>@(payment.SelectedIngredients)
-                                                                    @if (!string.IsNullOrEmpty(ingredientsString))
-                                                                    {
-                                                                        @ingredientsString
-                                                                    }
-                                                                </td>
-                                                            }
-                                                            else
-                                                            {
-                                                                <td>@payment.SelectedIngredients</td>
-                                                            }
-                                                            <td>@totalPrice</td>
-                                                        </tr>
-                                                    }
-                                                }
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <div class="">
-                                        <h5 class="fw-bold">Total:⠀</h5>
-                                    </div>
-                                    <div class="">
-                                        <h5 class="totalCartPrice"> @totalCartPrice</h5>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    </div>
-
-                    <div id="pixColumn" class="col payment-column" style="display: none;">
-                        <h4>Pagamento em Pix <span class="text-danger fw-bold">system not implemented only
-                                prototype</span></h4>
-
-                        <div>
-                            <img src="https://www.bookdown.org/pbaumgartner/itns-exercises/img/QR/Chap01/chap01-poll-intuitions-true-false-min.png"
-                                alt="">
-
-                        </div>
-
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <div id="pixStatusMessage"></div>
-                    </div>
-
-                    <div id="cardColumn" class="col payment-column" style="display: none;">
-                        <h4>Pagamento em Cartão <span class="text-danger fw-bold">system not implemented only
-                                prototype</span></h4>
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <div id="cardStatusMessages"></div>
-                    </div>
-
-
-                    <div id="moneyColumn" class="col payment-column" style="display: none;">
-                        <h4>Pagamento em Dinheiro <span class="text-danger fw-bold">system not implemented only
-                                prototype</span></h4>
-                        <div id="paymentDetails" class="mt-3">
-                            <h5>Detalhes do pagamento:</h5>
-                            <p id="amountPaid" class="text-warning fw-bold">Valor pago: R$ 0.00</p>
-                            <p id="amountRemaining" class="text-danger fw-bold">Valor restante: R$ @totalCartPrice</p>
-                            <p id="changeDue" class="text-secondary">Troco: R$ 0.00</p>
-                        </div>
-
-                        <div class="row">
-                            <div class="col">
-                                <button class="money-button btn btn-outline-info m-1" data-value="0.01">0.01</button>
-                                <button class="money-button btn btn-outline-info m-1" data-value="0.05">0.05</button>
-                                <button class="money-button btn btn-outline-info m-1" data-value="0.10">0.10</button>
-                                <button class="money-button btn btn-outline-info m-1" data-value="0.25">0.25</button>
-                                <button class="money-button btn btn-outline-info m-1" data-value="0.50">0.50</button>
-                                <button class="money-button btn btn-outline-info m-1" data-value="1">1.00</button>
-                                <button class="money-button btn btn-outline-info m-1" data-value="2">2.00</button>
-                                <button class="money-button btn btn-outline-info m-1" data-value="5">5.00</button>
-                                <button class="money-button btn btn-outline-info m-1" data-value="10">10.0</button>
-                                <button class="money-button btn btn-outline-info m-1" data-value="20">20.0</button>
-                                <button class="money-button btn btn-outline-info m-1" data-value="50">50.0</button>
-                                <button class="money-button btn btn-outline-info m-1" data-value="100">100</button>
-                                <button class="money-button btn btn-outline-info m-1" data-value="200">200</button>
-                            </div>
-                        </div>
-                    </div>
-
-
+<form method="post" asp-controller="Home" asp-action="AddPayment">
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true"
+        data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">Payment Method</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </div>
-                <button id="backButton" class="btn btn-danger" style="display: none;"><i class="bi bi-backspace"></i>Back</button>
+                <div class="modal-body">
+                    <div class="row m-2 text-center">
+                        <div class="col-auto" id="payment-info">
+                            <div class="radio-group justify-content-between">
+                                <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio payment-option"
+                                    data-payment-method="pix">
+                                    <div class="flex-row">
+                                        <div class="col">
+                                            <div class="pic">
+                                                <img class="irc_mut img-fluid"
+                                                    src="https://devtools.com.br/img/pix/logo-pix-png-icone-520x520.png"
+                                                    width="100" height="100">
+                                            </div>
+                                            <p>Pix</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio payment-option"
+                                    data-payment-method="debit card">
+                                    <div class="flex-row">
+                                        <div class="col">
+                                            <div class="pic">
+                                                <img class="irc_mut img-fluid"
+                                                    src="https://cdn-icons-png.flaticon.com/512/6963/6963703.png"
+                                                    width="100" height="100">
+                                            </div>
+                                            <p>Credito</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio payment-option"
+                                    data-payment-method="credit card">
+                                    <div class="flex-row">
+                                        <div class="col">
+                                            <div class="pic">
+                                                <img class="irc_mut img-fluid"
+                                                    src="https://cdn-icons-png.flaticon.com/512/6963/6963703.png"
+                                                    width="100" height="100">
+                                            </div>
+                                            <p>Debito</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto ml-sm-2 mx-1 card-block py-0 text-center radio payment-option"
+                                    data-payment-method="money">
+                                    <div class="flex-row">
+                                        <div class="col">
+                                            <div class="pic">
+                                                <img class="irc_mut img-fluid"
+                                                    src="https://cdn-icons-png.flaticon.com/512/925/925014.png"
+                                                    width="100" height="100">
+                                            </div>
+                                            <p>Money</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                @{
+                                    var totalCartPrice = 0.0;
+                                    <div class=" table-responsive ">
+                                        <table id="paymentCartTable" class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Quantity</th>
+                                                    <th>Product</th>
+                                                    <th>Ingredients</th>
+                                                    <th>Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+    @if (Model != null && Model.Cart != null && Model.Cart.Any())
+    {
+        @foreach (var payment in Model.Cart)
+        {
+            var product = Model.Products.FirstOrDefault(p => p.Id == payment.ProductId);
+            if (product != null)
+            {
+                <tr id="payment-@payment.Id">
+                    <td>@payment.Quantity</td>
+                    <td>@product.Name <img src="@product.ImageURL" alt="" class="img-small"></td>
+                    @if (!string.IsNullOrEmpty(payment.SelectedAdditionalProductsId))
+                    {
+                        var additionalProductIds = payment.SelectedAdditionalProductsId.Split(',');
+                        var selectedIngredients = new List<string>();
+                        foreach (var additionalProductId in additionalProductIds)
+                        {
+                            var selectedProduct = Model.Products.FirstOrDefault(p => p.Id == int.Parse(additionalProductId));
+                            if (selectedProduct != null)
+                            {
+                                selectedIngredients.Add(selectedProduct.Name);
+                            }
+                        }
+                        var ingredientsString = string.Join(", ", selectedIngredients);
+                        <td>@(payment.SelectedIngredients)
+                            @if (!string.IsNullOrEmpty(ingredientsString))
+                            {
+                                @ingredientsString
+                            }
+                        </td>
+                    }
+                    else
+                    {
+                        <td>@payment.SelectedIngredients</td>
+                    }
+                    @{
+                        var additionalProductsTotalPrice = 0.0;
+                    }
+                    @if (!string.IsNullOrEmpty(payment.SelectedAdditionalProductsId))
+                    {
+                        var additionalProductIds = payment.SelectedAdditionalProductsId.Split(',');
+                        foreach (var additionalProductId in additionalProductIds)
+                        {
+                            var selectedProduct = Model.Products.FirstOrDefault(p => p.Id == int.Parse(additionalProductId));
+                            if (selectedProduct != null)
+                            {
+                                additionalProductsTotalPrice += selectedProduct.Price;
+                            }
+                        }
+                    }
 
+                    @{
+                        double totalPrice;
+                    }
+                    @if (payment.ComboItem || product.DayPromotion == @ViewBag.CurrentDayOfWeek || product.DayPromotion == 8)
+                    {
+                        totalPrice = (product.PromotionPrice + additionalProductsTotalPrice) * payment.Quantity;
+                    }
+                    else
+                    {
+                        totalPrice = (product.Price + additionalProductsTotalPrice) * payment.Quantity;
+                    }
+                    @{
+                        totalCartPrice += totalPrice;
+                    }
+                    <td>@totalPrice</td>
+                </tr>
+
+                @foreach (var productPayment in Model.Cart.Select((item, i) => new
+                {
+                    Index = i,
+                    Item = item
+                }))
+                {
+                    var additionalProduct = Model.Products.FirstOrDefault(p => p.Id == productPayment.Item.ProductId);
+                    if (additionalProduct != null)
+                    {
+                        <input type="hidden" name="products[@productPayment.Index].ProductId" value="@additionalProduct.Id" />
+                        <input type="hidden" name="products[@productPayment.Index].Quantity" value="@productPayment.Item.Quantity" />
+                        <input type="hidden" name="products[@productPayment.Index].Name" value="@additionalProduct.Name" />
+                        <input type="hidden" name="products[@productPayment.Index].Type" value="@additionalProduct.Type" />
+                        <input type="hidden" name="products[@productPayment.Index].IngredientsAndAdditional" value="@productPayment.Item.SelectedIngredients" />
+                        <input type="hidden" id="DateTime" name="products[@productPayment.Index].DateTime" value="" />
+                        <input type="hidden" class="condition-payment" name="products[@productPayment.Index].ConditionPayment" value="" />
+                        
+                            double additionalPrice;
+                            if (productPayment.Item.ComboItem || additionalProduct.DayPromotion == @ViewBag.CurrentDayOfWeek || additionalProduct.DayPromotion == 8)
+                            {
+                                additionalPrice = (additionalProduct.PromotionPrice) * productPayment.Item.Quantity;
+                            }
+                            else
+                            {
+                                additionalPrice = (additionalProduct.Price) * productPayment.Item.Quantity;
+                            }
+                        
+                        <input type="hidden" name="products[@productPayment.Index].Price" value="@additionalPrice" />
+                    }
+                }
+            }
+        }
+    }
+</tbody>
+                                        </table>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <div class="">
+                                            <h5 class="fw-bold">Total:⠀</h5>
+                                        </div>
+                                        <div class="">
+                                            <h5 class="totalCartPrice"> @totalCartPrice</h5>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div id="pixColumn" class="col payment-column" style="display: none;">
+                            <h4>Pagamento em Pix <span class="text-danger fw-bold">system not implemented only
+                                    prototype</span>
+                            </h4>
+                            <div>
+                                <img src="https://www.bookdown.org/pbaumgartner/itns-exercises/img/QR/Chap01/chap01-poll-intuitions-true-false-min.png"
+                                    alt="">
+                            </div>
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div id="pixStatusMessage"></div>
+                        </div>
+                        <div id="cardColumn" class="col payment-column" style="display: none;">
+                            <h4>Pagamento em Cartão <span class="text-danger fw-bold">system not implemented only
+                                    prototype</span>
+                            </h4>
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div id="cardStatusMessages"></div>
+                        </div>
+                        <div id="moneyColumn" class="col payment-column" style="display: none;">
+                            <h4>Pagamento em Dinheiro <span class="text-danger fw-bold">system not implemented only
+                                    prototype</span>
+                            </h4>
+                            <div id="paymentDetails" class="mt-3">
+                                <h5>Detalhes do pagamento:</h5>
+                                <p id="amountPaid" class="text-warning fw-bold">Valor pago: R$ 0.00</p>
+                                <p id="amountRemaining" class="text-danger fw-bold">Valor restante: R$ @totalCartPrice
+                                </p>
+                                <p id="changeDue" class="text-secondary">Troco: R$ 0.00</p>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <button type="button" class="money-button btn btn-outline-info m-1"
+                                        data-value="0.01">0.01</button>
+                                    <button type="button" class="money-button btn btn-outline-info m-1"
+                                        data-value="0.05">0.05</button>
+                                    <button type="button" class="money-button btn btn-outline-info m-1"
+                                        data-value="0.10">0.10</button>
+                                    <button type="button" class="money-button btn btn-outline-info m-1"
+                                        data-value="0.25">0.25</button>
+                                    <button type="button" class="money-button btn btn-outline-info m-1"
+                                        data-value="0.50">0.50</button>
+                                    <button type="button" class="money-button btn btn-outline-info m-1"
+                                        data-value="1">1.00</button>
+                                    <button type="button" class="money-button btn btn-outline-info m-1"
+                                        data-value="2">2.00</button>
+                                    <button type="button" class="money-button btn btn-outline-info m-1"
+                                        data-value="5">5.00</button>
+                                    <button type="button" class="money-button btn btn-outline-info m-1"
+                                        data-value="10">10.0</button>
+                                    <button type="button" class="money-button btn btn-outline-info m-1"
+                                        data-value="20">20.0</button>
+                                    <button type="button" class="money-button btn btn-outline-info m-1"
+                                        data-value="50">50.0</button>
+                                    <button type="button" class="money-button btn btn-outline-info m-1"
+                                        data-value="100">100</button>
+                                    <button type="button" class="money-button btn btn-outline-info m-1"
+                                        data-value="200">200</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="backButton" type="button" class="btn btn-danger" style="display: none;"><i
+                        class="bi bi-backspace"></i>Back</button>
                 <button id="Finish" type="submit" class="btn btn-success" style="display: none;">Finish</button>
-        </div>
-    </div>
+                <script>
+                    const totalCartPrice = @totalCartPrice;
+                </script>
+</form>
 </div>
-
-
-<script>
-    const totalCartPrice = @totalCartPrice;
-</script>
+</div>
+</div>

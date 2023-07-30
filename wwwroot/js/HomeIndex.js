@@ -80,6 +80,25 @@ $(document).ready(function () {
 
 
 
+document.getElementById("Finish").addEventListener("click", function () {
+    const dateTimeInput = document.getElementById("DateTime");
+    const now = new Date();
+    dateTimeInput.value = now.toISOString(); // Define o valor do input com o horário atual no formato ISO (UTC)
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Select Pay Method
@@ -96,6 +115,9 @@ $(document).ready(function () {
     $('.payment-option').click(function () {
         var paymentMethod = $(this).data('payment-method');
 
+        // Encontra todos os elementos com a classe "condition-payment" e define o valor
+        $('.condition-payment').val(paymentMethod);
+
         $('.payment-column').hide();
         $('#payment-info').hide();
         $('#backButton').show();
@@ -108,7 +130,7 @@ $(document).ready(function () {
             if (paymentMethod === 'pix') {
                 $('#pixColumn').show();
                 processPixPayment();
-            } else if (paymentMethod === 'card') {
+            } else if (paymentMethod === 'debit card' || paymentMethod === 'credit card') {
                 $('#cardColumn').show();
                 processCardPayment();
             } else if (paymentMethod === 'money') {
@@ -116,6 +138,7 @@ $(document).ready(function () {
             }
         }
     });
+
 
     $('#backButton').click(function () {
         isPaymentInProgress = false;

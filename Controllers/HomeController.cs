@@ -60,6 +60,24 @@ namespace EasyProduct.Controllers
 
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public IActionResult AddPayment(IEnumerable<PaymentModel> products)
+        {
+            foreach (var payment in products)
+            {
+                // Adicione esta linha para depuração
+                Console.WriteLine($"Valor do ConditionPayment recebido: {payment.ConditionPayment}");
+
+                payment.DateTime = DateTime.Now;
+                _productsCartRepository.AddPayment(payment);
+
+                // Adicione esta linha para depuração após a atualização
+                Console.WriteLine($" Valor do ConditionPayment atualizado para: {payment.ConditionPayment}");
+            }
+
+            RemoveAllToCart();
+            return RedirectToAction("Index");
+        }
 
         [HttpGet]
         public IActionResult GetCartItems()
