@@ -49,19 +49,29 @@
 @if (Model != null && Model.Any())
 {
     <div id="cardsContainer" class="d-flex flex-wrap justify-content-start">
-        @foreach (var product in Model)
+    @foreach (var product in Model)
         {
-            <div class="card m-3 @((product.ConditionKitchen == 5) ? "isConditionKitchen5" : "")" style="width: 18rem;" data-type="@product.Type" data-id="@product.Id" data-conditionkitchen="@product.ConditionKitchen">
+            <div class="card m-3 @((product.ConditionKitchen == 5) ? "isConditionKitchen5" : "")" style="width: 18rem;"
+                data-type="@product.Type" data-id="@product.Id" data-conditionkitchen="@product.ConditionKitchen"
+                data-datetime="@product.DateTime.ToString("yyyy-MM-ddTHH:mm:ss")">
                 <div class="card-body">
-                    <h6 class="card-title">@product.Id - @product.Name</h6>
+                    <h6 class="card-title">@product.Id - @product.Name X @product.Quantity</h6>
                     <p class="card-text">@product.IngredientsAndAdditional</p>
-                    <h5>Time: <span>@((product.ConditionKitchen == 5) ? product.PreparationTime.ToString(@"hh\:mm\:ss") : "00:00")</span></h5>
+
+                    @if (product.ConditionKitchen == 5)
+                    {
+                        <h5>Time: <span>@product.PreparationTime.ToString(@"hh\:mm\:ss")</span></h5>
+                    }
+                    else
+                    {
+                        var timeDifference = DateTime.Now - product.DateTime;
+                        <h5>Time: <span id="timeSpan">@timeDifference.ToString(@"hh\:mm\:ss")</span></h5>
+                    }
                 </div>
             </div>
         }
     </div>
 }
 
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/js/ScreensIndex.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/ScreensIndex.js"></script>

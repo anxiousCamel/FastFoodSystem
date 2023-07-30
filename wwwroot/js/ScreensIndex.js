@@ -54,6 +54,41 @@ $(document).ready(function () {
     loadCheckboxesState();
     filterCards();
 
-    
+
+    function updateTime() {
+        // Itera sobre todos os elementos com a classe 'card'
+        $('.card').each(function () {
+            var productId = $(this).data('id');
+            var conditionKitchen = $(this).data('conditionkitchen');
+
+            // Se o produto não estiver na condição 5 (Já Servido), atualize o tempo
+            if (conditionKitchen !== 5) {
+                var productDateTime = new Date($(this).data('datetime'));
+                var currentTime = new Date();
+                var timeDifference = currentTime - productDateTime;
+
+                // Converte a diferença de tempo para horas, minutos e segundos
+                var hours = Math.floor(timeDifference / 3600000);
+                var minutes = Math.floor((timeDifference % 3600000) / 60000);
+                var seconds = Math.floor((timeDifference % 60000) / 1000);
+
+                // Atualiza o conteúdo do elemento com o novo tempo formatado
+                $(this).find('#timeSpan').text(formatTime(hours, minutes, seconds));
+            }
+        });
+    }
+
+    // Função para formatar o tempo
+    function formatTime(hours, minutes, seconds) {
+        return hours.toString().padStart(2, '0') + ':' +
+            minutes.toString().padStart(2, '0') + ':' +
+            seconds.toString().padStart(2, '0');
+    }
+
+    // Atualiza o tempo a cada 1 segundo (1000 milissegundos)
+    setInterval(updateTime, 1000);
+
+
+
 });
 
