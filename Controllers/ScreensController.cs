@@ -35,7 +35,5 @@ namespace EasyProduct.Controllers
             return RedirectToAction("Index");
         }
 
-
-
     }
 }

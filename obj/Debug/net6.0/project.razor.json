@@ -18442,6 +18442,11 @@
       "FilePath": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/Views/Shared/Error.cshtml",
       "TargetPath": "Views\\Shared\\Error.cshtml",
       "FileKind": "mvc"
+    },
+    {
+      "FilePath": "/home/belmonte/Desktop/Pastas/webdev/EasyProduct/Views/Dashboard/Index.cshtml",
+      "TargetPath": "Views\\Dashboard\\Index.cshtml",
+      "FileKind": "mvc"
     }
   ],
   "SerializationFormat": "0.3"

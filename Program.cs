@@ -14,6 +14,7 @@ builder.Services.AddEntityFrameworkSqlServer().AddDbContext<BancoContext>(option
 builder.Services.AddScoped<IScreensRepository, ScreensRepository>();
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 builder.Services.AddScoped<IProductsCartRepository, ProductsCartRepository>();
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

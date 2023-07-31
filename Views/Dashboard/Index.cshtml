@@ -1,0 +1,54 @@
+@model List<PaymentModel>
+
+@{
+    ViewData["Title"] = "DashBoard";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center">Id</th>
+                            <th scope="col" class="text-center">ProductId</th>
+                            <th scope="col" class="text-center">Type</th>
+                            <th scope="col" class="text-center">Name</th>
+                            <th scope="col" class="text-center">IngredientsAndAdditional</th>
+                            <th scope="col" class="text-center">Quantity</th>
+                            <th scope="col" class="text-center">Price</th>
+                            <th scope="col" class="text-center">ConditionPayment</th>
+                            <th scope="col" class="text-center">DateTime</th>
+                            <th scope="col" class="text-center">PreparationTime</th>
+                            <th scope="col" class="text-center">ConditionKitchen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var product in Model)
+                            {
+                                <tr>
+                                    <td scope="col" class="text-center">@product.Id</td>
+                                    <td scope="col" class="text-center">@product.ProductId</td>
+                                    <td scope="col" class="text-center">@product.Type</td>
+                                    <td scope="col" class="text-center">@product.Name</td>
+                                    <td scope="col" class="text-center">@product.IngredientsAndAdditional</td>
+                                    <td scope="col" class="text-center">@product.Quantity</td>
+                                    <td scope="col" class="text-center">@product.Price</td>
+                                    <td scope="col" class="text-center">@product.ConditionPayment</td>
+                                    <td scope="col" class="text-center">@product.DateTime</td>
+                                    <td scope="col" class="text-center">@product.PreparationTime</td>
+                                    <td scope="col" class="text-center">@product.ConditionKitchen</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
