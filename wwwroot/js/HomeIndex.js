@@ -265,17 +265,12 @@ function atualizarEstadoOffCanvas(estahAberto) {
     localStorage.setItem('offCanvasOpen', estahAberto ? 'true' : 'false');
 }
 
-// Função para lidar com a alternância do off-canvas
+// Função para lidar com a abertura e fechamento do off-canvas
 function alternarOffCanvas() {
     const offCanvas = document.querySelector('.offcanvas');
     if (offCanvas) {
-        const estahAbertoAtualmente = offCanvas.classList.contains('show');
-        if (estahAbertoAtualmente) {
-            offCanvas.classList.remove('show');
-        } else {
-            offCanvas.classList.add('show');
-        }
-        atualizarEstadoOffCanvas(!estahAbertoAtualmente);
+        offCanvas.classList.toggle('show');
+        atualizarEstadoOffCanvas(offCanvas.classList.contains('show'));
     }
 }
 
@@ -294,13 +289,12 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // Adicione um ouvinte de eventos para o botão de fechar o off-canvas
-const botaoFechar = document.querySelector('.btn-close');
-if (botaoFechar) {
-    botaoFechar.addEventListener('click', () => {
+const botaoFecharOffCanvas = document.querySelector('.offcanvas .btn-close');
+if (botaoFecharOffCanvas) {
+    botaoFecharOffCanvas.addEventListener('click', () => {
         alternarOffCanvas();
     });
 }
-
 // Salvar o estado do off-canvas antes de recarregar a página
 window.addEventListener('beforeunload', () => {
     const offCanvas = document.querySelector('.offcanvas');
