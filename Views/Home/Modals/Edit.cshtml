@@ -37,38 +37,53 @@
                                     <!-- ingredient -->
                                     <div class="form-group mt-3">
                                         <label for="editIngredients_@product.Id">Ingredients: </label>
-                                        @foreach (var ingredient in product.Ingredients.Split(','))
-                                        {
-                                            bool isChecked = cartItem.SelectedIngredients?.Split(',').Contains(ingredient.Trim()) ??
-                                            false;
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="editIngredient_@product.Id-@ingredient" value="@ingredient.Trim()"
-                                                    name="SelectedIngredients" checked="@isChecked" />
-                                                <label class="form-check-label"
-                                                    for="editIngredient_@product.Id-@ingredient">@ingredient.Trim()</label>
-                                            </div>
-                                        }
+                                        <ul class="ks-cboxtags">
+                                            @foreach (var ingredient in product.Ingredients.Split(','))
+                                            {
+                                                bool isChecked = cartItem.SelectedIngredients?.Split(',').Contains(ingredient.Trim()) ??
+                                                false;
+                                                    <li>
+                                                        <input class="form-check-input" type="checkbox"
+                                                            id="editIngredient_@product.Id-@ingredient" value="@ingredient.Trim()"
+                                                            name="SelectedIngredients" checked="@isChecked" />
+                                                        <label class="form-check-label"
+                                                            for="editIngredient_@product.Id-@ingredient">@ingredient.Trim()</label>
+                                                    </li>
+                                            }
+                                        </ul>
                                     </div>
 
                                     <!-- additionalProduct -->
                                     <div class="form-group mt-3">
                                         <label for="editAdditionalIngredients_@product.Id">Additional Ingredients: </label>
-                                        @foreach (var additionalProduct in Model.Products.Where(p => p.Type == 6))
-                                        {
-                                            bool isAdditionalProductSelected =
-                                            cartItem.SelectedAdditionalProductsId?.Split(',').Contains(additionalProduct.Id.ToString())
-                                            ?? false;
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input additional-product-checkbox" type="checkbox"
-                                                    id="editAdditionalProduct_@product.Id-@additionalProduct.Id"
-                                                    value="@additionalProduct.Id" name="SelectedAdditionalProductsId"
-                                                    checked="@isAdditionalProductSelected" data-price="@additionalProduct.Price" />
-                                                <label class="form-check-label"
-                                                    for="editAdditionalProduct_@product.Id-@additionalProduct.Id">@additionalProduct.Name
-                                                    - $@additionalProduct.Price</label>
-                                            </div>
-                                        }
+                                        <ul class="ks-cboxtags">
+
+                                            @{
+                                                // Dicionário para mapear os tipos de produto aos tipos de produtos adicionais
+                                                var additionalProductTypesMap = new Dictionary<int, int>
+                                                {
+                                                    { 1, 6 }, // Para produtos do tipo 1, os produtos adicionais são do tipo 6
+                                                    { 3, 8 }, // Para produtos do tipo 3, os produtos adicionais são do tipo 8
+                                                    { 4, 7 }  // Para produtos do tipo 4, os produtos adicionais são do tipo 7
+                                                };
+                                            }
+
+                                            @if (additionalProductTypesMap.ContainsKey(product.Type))
+                                            {
+                                                var additionalProductType = additionalProductTypesMap[product.Type];
+                                                var additionalProducts = Model.Products.Where(p => p.Type == additionalProductType);
+
+                                                foreach (var additionalProduct in additionalProducts)
+                                                {
+                                                    bool isAdditionalProductSelected = cartItem.SelectedAdditionalProductsId?.Split(',').Contains(additionalProduct.Id.ToString()) ?? false;
+                                                    <li>
+                                                        <input class="form-check-input additional-product-checkbox" type="checkbox" id="editAdditionalProduct_@product.Id-@additionalProduct.Id"
+                                                            value="@additionalProduct.Id" name="SelectedAdditionalProductsId" checked="@isAdditionalProductSelected" data-price="@additionalProduct.Price" />
+                                                        <label class="form-check-label" for="editAdditionalProduct_@product.Id-@additionalProduct.Id">@additionalProduct.Name - $@additionalProduct.Price</label>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
                                     </div>
 
                                     <!-- Quantity -->
@@ -97,7 +112,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-primary">Update</button>
+                                        <button type="submit" class="btn btn-danger">Update</button>
                                     </div>
                                 </form>
                             </div>

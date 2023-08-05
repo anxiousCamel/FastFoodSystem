@@ -45,11 +45,11 @@
                                     modalCounter++;
                                     // Criar um dicionário para mapear os tipos de produto aos tipos de produtos adicionais
                                     var additionalProductTypesMap = new Dictionary<int, int>
-                        {
-                        { 1, 6 }, // Para produtos do tipo 1, os produtos adicionais são do tipo 6
-                        { 3, 8 }, // Para produtos do tipo 3, os produtos adicionais são do tipo 8
-                        { 4, 7 } // Para produtos do tipo 4, os produtos adicionais são do tipo 7
-                        };
+                                    {
+                                    { 1, 6 }, // Para produtos do tipo 1, os produtos adicionais são do tipo 6
+                                    { 3, 8 }, // Para produtos do tipo 3, os produtos adicionais são do tipo 8
+                                    { 4, 7 } // Para produtos do tipo 4, os produtos adicionais são do tipo 7
+                                    };
                                 }
                                 @if (additionalProductTypesMap.ContainsKey(product.Type))
                                 {
@@ -95,7 +95,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-success">Add to cart</button>
+                                    <button type="submit" class="btn btn-danger">Add to cart</button>
                                 </div>
                             </form>
                         </div>
