@@ -9,28 +9,38 @@
 
 @functions {
     Dictionary<int, string> productTypeNames = new Dictionary<int, string>()
-{
-{ 1, "Hamburgers" },
-{ 2, "Drinks" },
-{ 3, "accompaniments" },
-{ 4, "dessert" },
-{ 5, "Toys" },
-{ 9, "Others" }
-};
+    {
+        { 1, "Hamburgers" },
+        { 9, "Hamburgers Combo" },
+        { 2, "Drinks" },
+        { 10, "Drinks Combo" },
+        { 3, "Accompaniments" },
+        { 11, "Accompaniments Combo" },
+        { 4, "Dessert" },
+        { 5, "Toys" },
+        { 6, "Additional Hamburgers" },
+        { 7, "Additional Dessert" },
+        { 8, "Additional Follow-up" },
+        { 12, "Others" }
+    };
+
     string GetProductTypeTitle(int productType)
     {
         if (productTypeNames.ContainsKey(productType))
-        { return productTypeNames[productType]; }
+        {
+            return productTypeNames[productType];
+        }
         return string.Empty;
     }
 }
+
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
 <!-- Button offCanvas -->
 <div class="d-flex justify-content-end">
     <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop"
-        aria-controls="staticBackdrop">
+            aria-controls="staticBackdrop">
         <i class="bi bi-cart"></i>
     </button>
 </div>
@@ -39,16 +49,25 @@
 <section class="mb-5">
     @if (Model != null && Model.Products.Any())
     {
-        var groupedProducts = Model.Products.GroupBy(p => p.Type);
-        foreach (var group in groupedProducts)
+        var groupedPairs = new List<List<int>>
         {
-            string productTypeTitle = GetProductTypeTitle(group.Key);
-            if (!string.IsNullOrEmpty(productTypeTitle))
+            new List<int> { 1, 9 },
+            new List<int> { 2, 10 },
+            new List<int> { 3, 11 },
+        };
+
+        foreach (var pair in groupedPairs)
+        {
+            var productsInPair = Model.Products.Where(p => pair.Contains(p.Type)).ToList();
+
+            if (productsInPair.Any())
             {
+                var productTypeTitle = GetProductTypeTitle(pair[0]);
+
                 <div class="mb-5">
                     <h4>@productTypeTitle</h4>
                     <div class="row row-cols-1 row-cols-md-5 g-4">
-                        @foreach (var product in group)
+                        @foreach (var product in productsInPair)
                         {
                             <div class="col">
                                 <div class="card" data-bs-toggle="modal" data-bs-target="#productModal_@product.Id">
@@ -81,7 +100,6 @@
         }
     }
 </section>
-
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/js/HomeIndex.js"></script>

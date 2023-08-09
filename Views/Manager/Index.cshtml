@@ -12,8 +12,20 @@
 
     @functions {
         Dictionary<int, string> productTypeNames = new Dictionary<int, string>()
-        {{ 1, "hamburgers" },{ 2, "Drinks" },{ 3, "accompaniments" },{ 4, "dessert" },{ 5, "Toys" },{ 6, "Additional Hamburgers" },
-        { 7, "Additional Dessert" },{ 8, "Additional Follow-up" },{ 9,"Others" }};
+        {
+        { 1, "hamburgers" },
+        { 9, "Hamburgers Combo" },
+        { 2, "Drinks" },
+        { 10, "Drinks Combo" },
+        { 3, "Accompaniments" },
+        { 11, "Accompaniments Combo" },
+        { 4, "Dessert" },
+        { 5, "Toys" },
+        { 6, "Additional Hamburgers" },
+        { 7, "Additional Dessert" },
+        { 8, "Additional Follow-up" },
+        { 12, "Others" }
+    };
 
         string GetProductTypeTitle(int productType)
         {

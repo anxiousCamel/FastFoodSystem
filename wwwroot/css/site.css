@@ -25,11 +25,6 @@ a {
 }
 
 
-
-
-
-
-
 .pic {
   margin-top: 30px;
   margin-bottom: 20px;
@@ -154,7 +149,23 @@ a {
   font-weight: 600;
 }
 
+
 .product-price small {
+  color: #fbdda0;
+  font-size: 80%;
+  font-weight: 400;
+  text-decoration: line-through;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.product-price-default{
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.product-price-default small {
+  color: #b1b1b1;
   font-size: 80%;
   font-weight: 400;
   text-decoration: line-through;
@@ -192,10 +203,6 @@ a {
 .no-transition .offcanvas {
   transition: none !important;
 }
-
-
-
-
 
 
 

@@ -40,19 +40,19 @@
                                     </ul>
                                 }
 
-                                <p>Additional Products:</p>
                                 @{
                                     modalCounter++;
                                     // Criar um dicionário para mapear os tipos de produto aos tipos de produtos adicionais
                                     var additionalProductTypesMap = new Dictionary<int, int>
                                     {
-                                    { 1, 6 }, // Para produtos do tipo 1, os produtos adicionais são do tipo 6
-                                    { 3, 8 }, // Para produtos do tipo 3, os produtos adicionais são do tipo 8
-                                    { 4, 7 } // Para produtos do tipo 4, os produtos adicionais são do tipo 7
+                                        { 1, 6 },  { 9, 6 },// Para produtos do tipo 1,9, os produtos adicionais são do tipo 6
+                                        { 3, 8 }, { 11, 8 }, // Para produtos do tipo 3,11 os produtos adicionais são do tipo 8
+                                        { 4, 7 } // Para produtos do tipo 4, os produtos adicionais são do tipo 7
                                     };
                                 }
                                 @if (additionalProductTypesMap.ContainsKey(product.Type))
                                 {
+                                    <p>Additional Products:</p>
                                     var additionalProductType = additionalProductTypesMap[product.Type];
                                     var additionalProducts = Model.Products.Where(p => p.Type ==
                                     additionalProductType).ToList();
@@ -72,14 +72,21 @@
                                     </ul>
                                 }
 
-                                <div class="input-group mt-3">
-                                    <button class="btn btn-outline-secondary decrease-quantity" type="button"
-                                        id="decreaseQuantity"><i class="bi bi-caret-down"></i></button>
-                                    <input type="text" class="form-control quantity" id="quantity" name="model.Quantity"
-                                        value="1">
-                                    <button class="btn btn-outline-secondary increase-quantity" type="button"
-                                        id="increaseQuantity"><i class="bi bi-caret-up"></i></button>
-                                </div>
+                                @if(@product.Type != 9 && @product.Type != 10 && @product.Type != 11)
+                                {
+                                    <div class="input-group mt-3">
+                                        <button class="btn btn-outline-secondary decrease-quantity" type="button" id="decreaseQuantity"><i class="bi bi-caret-down"></i></button>
+
+                                        <input type="text" class="form-control quantity" id="quantity" name="model.Quantity" value="1">
+
+                                        <button class="btn btn-outline-secondary increase-quantity" type="button" id="increaseQuantity"><i class="bi bi-caret-up"></i></button>
+                                    </div>
+                                }
+
+                                else
+                                {
+                                    <input type="hidden" class="form-control quantity" id="quantity" name="model.Quantity" value="1">
+                                }
 
                                 <div class="d-flex justify-content-end">
                                     @if (product.DayPromotion == @ViewBag.CurrentDayOfWeek || product.DayPromotion == 8)

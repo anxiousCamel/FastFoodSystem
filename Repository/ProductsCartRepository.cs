@@ -157,9 +157,9 @@ namespace EasyProduct.Repository
             var cartItems = GetCartItems();
 
             // Filtrar os produtos por tipo
-            var type1Products = cartItems.Where(c => _productsRepository.SearcheForId(c.ProductId).Type == 1).ToList();
-            var type2Products = cartItems.Where(c => _productsRepository.SearcheForId(c.ProductId).Type == 2).ToList();
-            var type3Products = cartItems.Where(c => _productsRepository.SearcheForId(c.ProductId).Type == 3).ToList();
+            var type1Products = cartItems.Where(c => _productsRepository.SearcheForId(c.ProductId).Type == 9).ToList();
+            var type2Products = cartItems.Where(c => _productsRepository.SearcheForId(c.ProductId).Type == 10).ToList();
+            var type3Products = cartItems.Where(c => _productsRepository.SearcheForId(c.ProductId).Type == 11).ToList();
 
             // Encontrar os combos válidos
             var validCombos = new List<List<int>>();
