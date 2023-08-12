@@ -12,19 +12,19 @@
 
     @functions {
         Dictionary<int, string> productTypeNames = new Dictionary<int, string>()
-        {
-        { 1, "hamburgers" },
-        { 9, "Hamburgers Combo" },
-        { 2, "Drinks" },
-        { 10, "Drinks Combo" },
-        { 3, "Accompaniments" },
-        { 11, "Accompaniments Combo" },
-        { 4, "Dessert" },
-        { 5, "Toys" },
-        { 6, "Additional Hamburgers" },
-        { 7, "Additional Dessert" },
-        { 8, "Additional Follow-up" },
-        { 12, "Others" }
+    {
+    { 1, "hamburgers" },
+    { 9, "Hamburgers Combo" },
+    { 2, "Drinks" },
+    { 10, "Drinks Combo" },
+    { 3, "Accompaniments" },
+    { 11, "Accompaniments Combo" },
+    { 4, "Dessert" },
+    { 5, "Toys" },
+    { 6, "Additional Hamburgers" },
+    { 7, "Additional Dessert" },
+    { 8, "Additional Follow-up" },
+    { 12, "Others" }
     };
 
         string GetProductTypeTitle(int productType)
@@ -55,17 +55,23 @@
                             {
                                 <div class="col">
                                     <div class="card">
-                                        <img src="@product.ImageURL" class="card-img" alt="...">
-                                        <h6 class="card-title">@product.Name</h6>
-                                        <p class="card-text">$@product.Price</p>
+                                        <div class="card-img-container">
+                                            <img src="@product.ImageURL" class="card-img" alt="...">
+                                        </div>
+                                        <div class="card-body">
+                                            <h6 class="card-title">@product.Name</h6>
+                                            <p class="card-text">$@product.Price</p>
 
-                                        <div class="row m-1">
-                                            <a class="btn btn-warning btn-sm col m-1 custom-link" role="button"
-                                                asp-route-id="@product.Id" asp-controller="Manager" asp-action="Edit">Edit</a>
+                                            <div class="row m-1">
 
-                                            <button type="button" class="btn btn-danger btn-sm col m-1" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal_@product.Id"
-                                                data-product-name="@product.Name">Remove</button>
+                                                <a class="btn btn-warning btn-sm custom-link col m-1" role="button"
+                                                    asp-route-id="@product.Id" asp-controller="Manager" asp-action="Edit">Edit</a>
+
+
+                                                <button type="button" class="btn btn-danger btn-sm col m-1" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal_@product.Id"
+                                                    data-product-name="@product.Name">Remove</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

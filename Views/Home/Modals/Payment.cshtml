@@ -77,127 +77,147 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                @if (Model != null && Model.Cart != null && Model.Cart.Any())
-                                {
-                                    @foreach (var payment in Model.Cart)
-                                    {
-                                        var product = Model.Products.FirstOrDefault(p => p.Id == payment.ProductId);
-                                        if (product != null)
-                                        {
-                                            var additionalProductsTotalPrice = 0.0;
-                                            if (!string.IsNullOrEmpty(payment.SelectedAdditionalProductsId))
-                                            {
-                                                var additionalProductIds = payment.SelectedAdditionalProductsId.Split(',');
-                                                foreach (var additionalProductId in additionalProductIds)
+                                                @if (Model != null && Model.Cart != null && Model.Cart.Any())
                                                 {
-                                                    var selectedProduct = Model.Products.FirstOrDefault(p => p.Id == int.Parse(additionalProductId));
-                                                    if (selectedProduct != null)
+                                                    @foreach (var payment in Model.Cart)
                                                     {
-                                                        additionalProductsTotalPrice += selectedProduct.Price;
-                                                    }
-                                                }
-                                            }
-
-                                            double totalPrice;
-                                            if (payment.ComboItem || product.DayPromotion == @ViewBag.CurrentDayOfWeek || product.DayPromotion == 8)
-                                            {
-                                                totalPrice = (product.PromotionPrice + additionalProductsTotalPrice) * payment.Quantity;
-                                            }
-                                            else
-                                            {
-                                                totalPrice = (product.Price + additionalProductsTotalPrice) * payment.Quantity;
-                                            }
-                                            totalCartPrice += totalPrice;
-
-                                            <tr id="payment-@payment.Id">
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col-3">
-                                                            <img src="@product.ImageURL" alt="" class="img-small">
-                                                        </div>
-
-                                                        <div class="col"  style="text-align: left;">
-                                                            <h5><span>X @payment.Quantity</span> @product.Name</h5>
-                                                            @if (!string.IsNullOrEmpty(payment.SelectedAdditionalProductsId))
+                                                        var product = Model.Products.FirstOrDefault(p => p.Id == payment.ProductId);
+                                                        if (product != null)
+                                                        {
+                                                            var additionalProductsTotalPrice = 0.0;
+                                                            if (!string.IsNullOrEmpty(payment.SelectedAdditionalProductsId))
                                                             {
                                                                 var additionalProductIds = payment.SelectedAdditionalProductsId.Split(',');
-                                                                var selectedIngredients = new List<string>();
                                                                 foreach (var additionalProductId in additionalProductIds)
                                                                 {
-                                                                    var selectedProduct = Model.Products.FirstOrDefault(p => p.Id == int.Parse(additionalProductId));
+                                                                    var selectedProduct = Model.Products.FirstOrDefault(p => p.Id ==
+                                                                    int.Parse(additionalProductId));
                                                                     if (selectedProduct != null)
                                                                     {
-                                                                        selectedIngredients.Add(selectedProduct.Name);
+                                                                        additionalProductsTotalPrice += selectedProduct.Price;
                                                                     }
                                                                 }
-                                                                var ingredientsString = string.Join(", ", selectedIngredients);
-                                                                @(payment.SelectedIngredients)
-                                                                @if (!string.IsNullOrEmpty(ingredientsString))
-                                                                {
-                                                                    <p>
-                                                                        @ingredientsString
-                                                                    </p>
-                                                                }
-
                                                             }
 
+                                                            double totalPrice;
+                                                            if (payment.ComboItem || product.DayPromotion == @ViewBag.CurrentDayOfWeek
+                                                            || product.DayPromotion == 8)
+                                                            {
+                                                                totalPrice = (product.PromotionPrice + additionalProductsTotalPrice) *
+                                                                payment.Quantity;
+                                                            }
                                                             else
                                                             {
-                                                                <p>
-                                                                    @payment.SelectedIngredients
-                                                                </p>
+                                                                totalPrice = (product.Price + additionalProductsTotalPrice) *
+                                                                payment.Quantity;
                                                             }
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    @if (payment.ComboItem)
-                                                    {
-                                                        <div class="product-price">
-                                                            <small>$@product.Price</small>$@product.PromotionPrice
-                                                        </div>
+                                                            totalCartPrice += totalPrice;
+
+                                                            <tr id="payment-@payment.Id">
+                                                                <td>
+                                                                    <div class="row">
+                                                                        <div class="col-3">
+                                                                            <img src="@product.ImageURL" alt="" class="img-small">
+                                                                        </div>
+
+                                                                        <div class="col" style="text-align: left;">
+                                                                            <h5><span>X @payment.Quantity</span> @product.Name</h5>
+                                                                            @if(!string.IsNullOrEmpty(payment.SelectedAdditionalProductsId))
+                                                                            {
+                                                                                var additionalProductIds =
+                                                                                payment.SelectedAdditionalProductsId.Split(',');
+                                                                                var selectedIngredients = new List<string>();
+                                                                                foreach (var additionalProductId in
+                                                                                additionalProductIds)
+                                                                                {
+                                                                                    var selectedProduct = Model.Products.FirstOrDefault(p =>
+                                                                                    p.Id == int.Parse(additionalProductId));
+                                                                                    if (selectedProduct != null)
+                                                                                    {
+                                                                                        selectedIngredients.Add(selectedProduct.Name);
+                                                                                    }
+                                                                                }
+                                                                                var ingredientsString = string.Join(", ",
+                                                                                selectedIngredients);
+                                                                                @(payment.SelectedIngredients)
+                                                                                @if (!string.IsNullOrEmpty(ingredientsString))
+                                                                                {
+                                                                                    <p>
+                                                                                        @ingredientsString
+                                                                                    </p>
+                                                                                }
+
+                                                                            }
+
+                                                                            else
+                                                                            {
+                                                                                <p>
+                                                                                    @payment.SelectedIngredients
+                                                                                </p>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    @if (payment.ComboItem)
+                                                                    {
+                                                                        <div class="product-price">
+                                                                            <small>$@product.Price</small>$@product.PromotionPrice
+                                                                        </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="product-price">@totalPrice</span>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                            @foreach (var productPayment in Model.Cart.Select((item, i) => new
+                                                            {
+                                                                Index = i,
+                                                                Item = item
+                                                            }))
+                                                            {
+                                                                var additionalProduct = Model.Products.FirstOrDefault(p => p.Id ==
+                                                                productPayment.Item.ProductId);
+                                                                if (additionalProduct != null)
+                                                                {
+                                                                    <input type="hidden" name="products[@productPayment.Index].ProductId"
+                                                                        value="@additionalProduct.Id" />
+                                                                    <input type="hidden" name="products[@productPayment.Index].Quantity"
+                                                                        value="@productPayment.Item.Quantity" />
+                                                                    <input type="hidden" name="products[@productPayment.Index].Name"
+                                                                        value="@additionalProduct.Name" />
+                                                                    <input type="hidden" name="products[@productPayment.Index].Type"
+                                                                        value="@additionalProduct.Type" />
+                                                                    <input type="hidden"
+                                                                        name="products[@productPayment.Index].IngredientsAndAdditional"
+                                                                        value="@productPayment.Item.SelectedIngredients" />
+                                                                    <input type="hidden" id="DateTime"
+                                                                        name="products[@productPayment.Index].DateTime" value="" />
+                                                                    <input type="hidden" class="condition-payment"
+                                                                        name="products[@productPayment.Index].ConditionPayment" value="" />
+
+                                                                    double additionalPrice;
+                                                                    if (productPayment.Item.ComboItem || additionalProduct.DayPromotion ==
+                                                                    @ViewBag.CurrentDayOfWeek || additionalProduct.DayPromotion == 8)
+                                                                    {
+                                                                        additionalPrice = (additionalProduct.PromotionPrice) *
+                                                                        productPayment.Item.Quantity;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        additionalPrice = (additionalProduct.Price) * productPayment.Item.Quantity;
+                                                                    }
+
+                                                                    <input type="hidden" name="products[@productPayment.Index].Price"
+                                                                        value="@additionalPrice" />
+                                                                }
+                                                            }
+                                                        }
                                                     }
-                                                    else
-                                                    {
-                                                        <span class="product-price">@totalPrice</span>
-                                                    }
-                                                </td>
-                                            </tr>
-                                         @foreach (var productPayment in Model.Cart.Select((item, i) => new
-                {
-                    Index = i,
-                    Item = item
-                }))
-                {
-                    var additionalProduct = Model.Products.FirstOrDefault(p => p.Id == productPayment.Item.ProductId);
-                    if (additionalProduct != null)
-                    {
-                        <input type="hidden" name="products[@productPayment.Index].ProductId" value="@additionalProduct.Id" />
-                        <input type="hidden" name="products[@productPayment.Index].Quantity" value="@productPayment.Item.Quantity" />
-                        <input type="hidden" name="products[@productPayment.Index].Name" value="@additionalProduct.Name" />
-                        <input type="hidden" name="products[@productPayment.Index].Type" value="@additionalProduct.Type" />
-                        <input type="hidden" name="products[@productPayment.Index].IngredientsAndAdditional" value="@productPayment.Item.SelectedIngredients" />
-                        <input type="hidden" id="DateTime" name="products[@productPayment.Index].DateTime" value="" />
-                        <input type="hidden" class="condition-payment" name="products[@productPayment.Index].ConditionPayment" value="" />
-                        
-                            double additionalPrice;
-                            if (productPayment.Item.ComboItem || additionalProduct.DayPromotion == @ViewBag.CurrentDayOfWeek || additionalProduct.DayPromotion == 8)
-                            {
-                                additionalPrice = (additionalProduct.PromotionPrice) * productPayment.Item.Quantity;
-                            }
-                            else
-                            {
-                                additionalPrice = (additionalProduct.Price) * productPayment.Item.Quantity;
-                            }
-                        
-                        <input type="hidden" name="products[@productPayment.Index].Price" value="@additionalPrice" />
-                    }
-                }
-            }
-        }
-    }
-</tbody>
-                        </table>
+                                                }
+                                            </tbody>
+                                        </table>
                                     </div>
                                     <div class="d-flex justify-content-end">
                                         <div class="">

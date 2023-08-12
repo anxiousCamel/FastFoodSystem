@@ -16,16 +16,20 @@ $(document).ready(function () {
 
     // Function to filter the cards
     function filterCards() {
-        var selectedTypes = $(".chkFilter:checked").map(function () { return parseInt($(this).val()); }).get();
-        var isJaServidosChecked = $("#chkServidos").prop("checked");
+        var tiposSelecionados = [];
+        $(".chkFilter:checked").each(function () {
+            tiposSelecionados.push(...$(this).val().split(',').map(Number));
+        });
+
+        var estaJaServidos = $("#chkServidos").prop("checked");
 
         $("#cardsContainer > .card").each(function () {
-            var cardType = parseInt($(this).data("type"));
-            var isConditionKitchen5 = $(this).data("conditionkitchen") === 5;
+            var tipoCartao = parseInt($(this).data("type"));
+            var estaCondicaoCozinha5 = $(this).data("conditionkitchen") === 5;
 
             $(this).toggle(
-                (selectedTypes.includes(cardType) && !isConditionKitchen5) ||
-                (isJaServidosChecked && isConditionKitchen5 && selectedTypes.includes(cardType))
+                (tiposSelecionados.includes(tipoCartao) && !estaCondicaoCozinha5) ||
+                (estaJaServidos && estaCondicaoCozinha5 && tiposSelecionados.includes(tipoCartao))
             );
         });
     }
@@ -87,8 +91,6 @@ $(document).ready(function () {
 
     // Atualiza o tempo a cada 1 segundo (1000 milissegundos)
     setInterval(updateTime, 1000);
-
-
 
 });
 

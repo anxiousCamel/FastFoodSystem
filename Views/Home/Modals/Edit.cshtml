@@ -89,18 +89,21 @@
                                     <!-- Quantity -->
                                     @if(@product.Type != 9 && @product.Type != 10 && @product.Type != 11)
                                     {
-                                        <div class="input-group mt-3">
-                                            <button class="btn btn-outline-secondary decrease-quantity" type="button" id="decreaseQuantity"><i class="bi bi-caret-down"></i></button>
-
-                                            <input type="text" class="form-control quantity" id="quantity" name="model.Quantity" value="1">
-
-                                            <button class="btn btn-outline-secondary increase-quantity" type="button" id="increaseQuantity"><i class="bi bi-caret-up"></i></button>
+                                        <div class="input-group mt-3 mb-3">
+                                            <button class="btn btn-outline-secondary decrease-quantity" type="button"
+                                                id="decreaseQuantity"><i class="bi bi-caret-down"></i></button>
+                                            <input type="number" class="form-control quantity" id="editQuantity_@product.Id"
+                                                name="Quantity" value="@cartItem.Quantity">
+                                            <button class="btn btn-outline-secondary increase-quantity" type="button"
+                                                id="increaseQuantity"><i class="bi bi-caret-up"></i></button>
                                         </div>
                                     }
 
                                     else
-                                    {
-                                        <input type="hidden" class="form-control quantity" id="quantity" name="model.Quantity" value="1">
+
+                                    { 
+                                        <input type="hidden" class="form-control quantity" id="editQuantity_@product.Id"
+                                        name="Quantity" value="@cartItem.Quantity">
                                     }
 
                                     <div class="text-end d-flex justify-content-end">
@@ -120,7 +123,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-danger">Update</button>
+                                        <button type="submit" class="btn btn-warning">Update</button>
                                     </div>
                                 </form>
                             </div>
