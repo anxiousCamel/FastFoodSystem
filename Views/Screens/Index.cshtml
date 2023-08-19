@@ -20,12 +20,12 @@
                 </div>
 
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input chkFilter" type="checkbox" id="chkBebidas" value="10">
+                    <input class="form-check-input chkFilter" type="checkbox" id="chkBebidas" value="3,10">
                     <label class="form-check-label" for="chkBebidas">Bebidas</label>
                 </div>
 
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input chkFilter" type="checkbox" id="chkAcompanhamentos" value="11">
+                    <input class="form-check-input chkFilter" type="checkbox" id="chkAcompanhamentos" value="2,11">
                     <label class="form-check-label" for="chkAcompanhamentos">Acompanhamentos</label>
                 </div>
 
@@ -53,7 +53,8 @@
             // Verificar se o tipo de produto está na lista permitida
             if ((productType == 1 || productType == 9) || // Hamburgers
                 (productType == 2 || productType == 10) || // Bebidas
-                (productType == 3 || productType == 11))   // Acompanhamentos
+                (productType == 3 || productType == 11) ||  // Acompanhamentos
+                (productType == 4 ))  // Sobremesas
             {
                 <div class="card m-3 @((product.ConditionKitchen == 5) ? "isConditionKitchen5" : "")" style="width: 18rem;"
                     data-type="@product.Type" data-id="@product.Id" data-conditionkitchen="@product.ConditionKitchen"

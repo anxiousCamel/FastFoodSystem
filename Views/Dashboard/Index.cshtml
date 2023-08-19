@@ -7,6 +7,70 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="container">
+    <div>
+        <div class="mt-5">
+            <button type="button" id="btn24h" class="btn btn-outline-secondary m-1"
+                onclick="calcularRelatorios('24h')">Ultimas 24 horas</button>
+            <button type="button" id="btn7d" class="btn btn-outline-secondary m-1"
+                onclick="calcularRelatorios('7d')">Ultimos 7 Dias</button>
+            <button type="button" id="btn30d" class="btn btn-outline-secondary m-1"
+                onclick="calcularRelatorios('30d')">Ultimos 30 Dias</button>
+            <button type="button" id="btn6m" class="btn btn-outline-secondary m-1"
+                onclick="calcularRelatorios('6m')">Ultimos 6 Meses</button>
+            <button type="button" id="btn12m" class="btn btn-outline-secondary m-1"
+                onclick="calcularRelatorios('12m')">Ultimos 12 Meses</button>
+        </div>
+
+        <!-- Relatório de Vendas -->
+        <h4 class="mt-3">Relatório de Vendas</h4>
+
+        <div class="row">
+            <div class="card col m-2">
+                <div class="card-body">
+                    <h3><span id="produtosVendidos">0</span></h3>
+                    <p>Produtos Vendidos</p>
+                </div>
+            </div>
+
+            <div class="card col m-2">
+                <div class="card-body">
+                    <h3>R$<span id="vendasTotais">0.00</span></h3>
+                    <p>Venda Totais</p>
+                </div>
+            </div>
+
+            <div class="card col m-2">
+                <div class="card-body">
+                    <h3>R$<span id="ticketMedio">0.00</span></h3>
+                    <p>Ticket médio</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Relatório de Preparação -->
+        <h4 class="mt-3">Relatório de Preparação</h4>
+
+        <div class="row">
+            <div class="card col m-2">
+                <div class="card-body">
+                    <h3><span id="tempoTotal">00:00:0.000</span></h3>
+                    <p>Tempo Total</p>
+                </div>
+            </div>
+
+            <div class="card col m-2">
+                <div class="card-body">
+                    <h3><span id="tempoMedio">00:00:0.000</span></h3>
+                    <p>Tempo médio</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container mt-5">
     <div class="row">
         <div class="col">
             <div class="table-responsive">
@@ -52,3 +116,121 @@
         </div>
     </div>
 </div>
+
+<script>
+
+
+
+    // Função para calcular relatórios com base no período selecionado
+    function calcularRelatorios(periodo) {
+        // Obter os elementos com os IDs relevantes
+        var produtosVendidosElement = document.querySelector("#produtosVendidos");
+        var vendasTotaisElement = document.querySelector("#vendasTotais");
+        var ticketMedioElement = document.querySelector("#ticketMedio");
+        var tempoTotalElement = document.querySelector("#tempoTotal");
+        var tempoMedioElement = document.querySelector("#tempoMedio");
+
+        // Calcular valores fictícios para os relatórios
+        var produtosVendidos = 0;
+        var vendasTotais = 0;
+        var ticketMedio = 0;
+        var tempoTotal = 0;
+        var produtosComTempo = 0;
+
+        // Data de hoje
+        var hoje = new Date();
+
+        // Loop através dos produtos na tabela
+        var produtos = document.querySelectorAll(".table tbody tr");
+        produtos.forEach(function (produto) {
+            // Substitua pelos valores reais dos produtos
+            var quantidade = parseFloat(produto.querySelector(".text-center:nth-child(6)").textContent);
+            var preco = parseFloat(produto.querySelector(".text-center:nth-child(7)").textContent);
+            var tempoProduto = produto.querySelector(".text-center:nth-child(10)").textContent;
+
+            // Verificar se o produto está dentro do período selecionado
+            var dataProduto = new Date(produto.querySelector(".text-center:nth-child(9)").textContent.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, "$3-$2-$1T$4:$5:$6Z"));
+            var diff = hoje - dataProduto;
+            var diffEmDias = diff / (1000 * 60 * 60 * 24); // Converter para dias
+
+            if (
+                (periodo === '24h' && diffEmDias <= 1) ||
+                (periodo === '7d' && diffEmDias <= 7) ||
+                (periodo === '30d' && diffEmDias <= 30) ||
+                (periodo === '6m' && diffEmDias <= 180) ||
+                (periodo === '12m' && diffEmDias <= 365)
+            ) {
+                produtosVendidos += quantidade;
+                vendasTotais += quantidade * preco;
+
+                // Calcular Tempo Total
+                if (tempoProduto) {
+                    var tempoArray = tempoProduto.split(':');
+                    var segundosTotais = parseFloat(tempoArray[0]) * 3600 + parseFloat(tempoArray[1]) * 60 + parseFloat(tempoArray[2]);
+                    tempoTotal += segundosTotais;
+                    produtosComTempo++;
+                }
+            }
+        });
+
+        // Calcular Ticket Médio
+        if (produtosVendidos > 0) {
+            ticketMedio = vendasTotais / produtosVendidos;
+        }
+
+        // Calcular Tempo Médio
+        var tempoMedio = 0;
+        if (produtosComTempo > 0) {
+            tempoMedio = tempoTotal / produtosComTempo;
+        }
+
+        // Atualizar os elementos com os resultados calculados
+        produtosVendidosElement.textContent = produtosVendidos;
+        vendasTotaisElement.textContent = vendasTotais.toFixed(2);
+        ticketMedioElement.textContent = ticketMedio.toFixed(2);
+        tempoTotalElement.textContent = formatarTempo(tempoTotal);
+        tempoMedioElement.textContent = formatarTempo(tempoMedio);
+
+        // Chamar a função para mudar a classe do botão clicado
+        switch (periodo) {
+            case '24h':
+                mudarClasseBotao('btn24h');
+                break;
+            case '7d':
+                mudarClasseBotao('btn7d');
+                break;
+            case '30d':
+                mudarClasseBotao('btn30d');
+                break;
+            case '6m':
+                mudarClasseBotao('btn6m');
+                break;
+            case '12m':
+                mudarClasseBotao('btn12m');
+                break;
+            default:
+                break;
+        }
+    }
+
+    function formatarTempo(segundos) {
+        var horas = Math.floor(segundos / 3600);
+        var minutos = Math.floor((segundos % 3600) / 60);
+        var segundosRestantes = segundos % 60;
+        return horas.toString().padStart(2, '0') + ':' + minutos.toString().padStart(2, '0') + ':' + segundosRestantes.toFixed(3);
+    }
+
+    function mudarClasseBotao(id) {
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            if (button.id === id) {
+                button.classList.remove('btn-outline-secondary');
+                button.classList.add('btn-success');
+            } else {
+                button.classList.remove('btn-success');
+                button.classList.add('btn-outline-secondary');
+            }
+        });
+    }
+
+</script>
